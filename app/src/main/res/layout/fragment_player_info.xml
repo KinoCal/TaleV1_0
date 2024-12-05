@@ -1,0 +1,96 @@
+<!-- playerinfofragment.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/player_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:layout_margin="6dp"
+        android:background="@drawable/border">
+
+    <!-- Player Name -->
+    <TextView
+            android:id="@+id/player_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Player Name: JohnDoe"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    <!-- Player Health -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="4dp">
+
+        <TextView
+                android:id="@+id/player_hp_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HP:"
+                android:textSize="16sp" />
+
+        <ProgressBar
+                android:id="@+id/player_hp_progressbar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="16dp"
+                android:layout_weight="1"
+                android:max="100"
+                android:progress="100"
+                android:progressTint="#FF0000"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
+
+        <TextView
+                android:id="@+id/player_hp_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="75/100"
+                android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- Player Gold -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="4dp">
+
+        <TextView
+                android:id="@+id/player_gold_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gold:"
+                android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <!-- Player Level and Experience -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
+
+        <TextView
+                android:id="@+id/player_level_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Level:"
+                android:textSize="16sp"
+                android:layout_marginEnd="4dp" />
+
+        <TextView
+                android:id="@+id/player_current_exp_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EXP:"
+                android:textSize="16sp" />
+
+
+    </LinearLayout>
+</LinearLayout>

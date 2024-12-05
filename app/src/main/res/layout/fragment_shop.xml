@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".InventoryFragment"
+        android:paddingTop="?attr/actionBarSize">
+
+
+    <!-- Main container for all the sections -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_margin="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <!-- Inventory Section (Vertical List of Buttons) -->
+        <LinearLayout
+                android:background="@drawable/border"
+
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/inventory_layout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/shop_layout"
+                android:padding="8dp"
+                android:weightSum="1">
+
+            <!-- Buttons for Inventory Items -->
+            <Button
+                    android:id="@+id/inventory_item_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Item 1"/>
+            <Button
+                    android:id="@+id/inventory_item_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Item 2"/>
+            <Button
+                    android:id="@+id/inventory_item_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Item 3"/>
+            <Button
+                    android:id="@+id/inventory_item_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Item 4"/>
+            <Button
+                    android:id="@+id/inventory_item_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Item 5"/>
+            <!-- Add more items as needed -->
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:background="@drawable/border"
+                android:layout_marginTop="6dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/shop_layout"
+                app:layout_constraintTop_toBottomOf="@+id/inventory_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="8dp">
+
+            <TextView
+                    android:text="Shop item's"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/shop_items_title"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/shop_item_1"
+                    android:textSize="28sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+
+                    android:id="@+id/shop_item_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="item1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toStartOf="@+id/shop_item_2"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            <Button
+
+                    android:id="@+id/shop_item_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="item2"
+                    app:layout_constraintStart_toEndOf="@+id/shop_item_1"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toStartOf="@+id/shop_item_3"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            <Button
+
+                    android:id="@+id/shop_item_3"
+                    android:text="item3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/shop_item_2"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toStartOf="@+id/shop_item_4"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            <Button
+
+                    android:id="@+id/shop_item_4"
+                    android:text="item4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/shop_item_3"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            <!-- Add more equipment buttons if needed -->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Equipment Actions Section (Equip/Unequip and TextViews) -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:background="@drawable/border"
+                android:layout_marginTop="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/equipment_actions_layout"
+                app:layout_constraintTop_toBottomOf="@+id/shop_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="8dp">
+
+            <!-- TextViews to display selected item information -->
+            <TextView
+                    android:text="Item Information"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/item_information_title"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textSize="20sp" />
+
+            <Button
+                    android:id="@+id/buy_item_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buy"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/item_information_title" />
+
+            <Button
+                    android:id="@+id/sell_item_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sell"
+                    app:layout_constraintTop_toBottomOf="@+id/buy_item_button"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                    android:id="@+id/selected_item_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name: "
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/item_information_title" />
+
+            <TextView
+                    android:id="@+id/selected_item_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price: "
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@+id/selected_item_name"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                    android:id="@+id/selected_item_damage_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Damage: "
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@+id/selected_item_price"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+            <TextView
+                    android:id="@+id/selected_item_armor_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Armor: "
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@+id/selected_item_damage_value"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                    android:text="Heals: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/selected_item_heal_value"
+                    app:layout_constraintTop_toBottomOf="@+id/selected_item_damage_value"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

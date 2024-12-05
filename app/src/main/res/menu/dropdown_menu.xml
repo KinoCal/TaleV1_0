@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/nav_inventory"
+            android:title="Inventory" />
+    <item
+            android:id="@+id/nav_map"
+            android:title="Map" />
+    <item
+            android:id="@+id/nav_shop"
+            android:title="Shop" />
+</menu>

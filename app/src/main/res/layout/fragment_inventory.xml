@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".InventoryFragment"
+        android:paddingTop="?attr/actionBarSize">
+
+
+    <!-- Main container for all the sections -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+
+            >
+
+        <!-- Inventory Section (Vertical List of Buttons) -->
+        <LinearLayout
+                android:background="@drawable/border"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/inventory_layout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/shop_layout"
+                android:padding="8dp"
+                android:layout_margin="6dp"
+                android:weightSum="1">
+
+
+            <Button
+                    android:id="@+id/inventory_item_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Item 1"/>
+            <Button
+                    android:id="@+id/inventory_item_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Item 2"/>
+            <Button
+                    android:id="@+id/inventory_item_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Item 3"/>
+            <Button
+                    android:id="@+id/inventory_item_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Item 4"/>
+            <Button
+                    android:id="@+id/inventory_item_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Item 5"/>
+            <!-- Add more items as needed -->
+        </LinearLayout>
+
+        <!-- Equipment Section (Custom Button Layout) -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:background="@drawable/border"
+                android:layout_margin="6dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/shop_layout"
+                app:layout_constraintTop_toBottomOf="@+id/inventory_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="8dp">
+
+            <!-- Example equipment buttons (can be styled and positioned as needed) -->
+
+            <TextView
+                    android:text="Equipment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/equipment_textview"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/equipped_armor"
+                    android:textSize="28sp"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                    android:id="@+id/equipped_weapon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Equipped Weapon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:padding="6dp"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toStartOf="@+id/equipped_armor" />
+
+            <Button
+                    android:id="@+id/equipped_armor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Equipped Armor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:padding="6dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/equipped_weapon"
+                    app:layout_constraintHorizontal_bias="0.5" />
+
+
+            <!-- Add more equipment buttons if needed -->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Equipment Actions Section (Equip/Unequip and TextViews) -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:background="@drawable/border"
+                android:layout_margin="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/equipment_actions_layout"
+                app:layout_constraintTop_toBottomOf="@+id/shop_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="8dp">
+
+            <!-- Equip Button -->
+
+            <!-- Unequip Button -->
+
+            <!-- TextViews to display selected item information -->
+            <TextView
+                    android:text="Item Information"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/item_information_title"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textSize="20sp" />
+
+            <Button
+                    android:id="@+id/equip_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Equip"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:padding="6dp"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                    android:id="@+id/unequip_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Unequip"
+                    app:layout_constraintTop_toBottomOf="@+id/equip_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:padding="6dp"/>
+
+            <TextView
+                    android:id="@+id/selected_item_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name: "
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/item_information_title" />
+
+            <TextView
+                    android:id="@+id/selected_item_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price: "
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@+id/selected_item_name"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                    android:id="@+id/selected_item_damage_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Damage: "
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@+id/selected_item_price"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+            <TextView
+                    android:id="@+id/selected_item_armor_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Armor: "
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@+id/selected_item_damage_value"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                    android:text="Heals: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/selected_item_heal_value"
+                    app:layout_constraintTop_toBottomOf="@+id/selected_item_damage_value"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                    android:text="Use"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/use_button"
+                    app:layout_constraintTop_toBottomOf="@+id/unequip_button"
+                    app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

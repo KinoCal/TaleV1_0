@@ -1,0 +1,32 @@
+<!-- activity_main.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_gray_background">
+
+
+
+    <!-- Implement your dropdown menu here -->
+    <!-- Menu Fragment Container -->
+    <FrameLayout
+            android:id="@+id/menu_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top" />
+
+    <!-- Main Fragment Container -->
+    <FrameLayout
+            android:id="@+id/main_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/player_info_fragment_container"
+
+            />
+
+    <!-- Player Info Fragment at the Bottom -->
+    <FrameLayout
+        android:id="@+id/player_info_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>
