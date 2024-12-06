@@ -17,15 +17,15 @@ public class InventoryManager {
 
 		if (!player.isInventoryFull() || tempItem.getName().equals(item.getName())) {
 			for (int i = 0; i < 5; i++) {
-				if (player.getInventoryItems()[i].getName().equals(item.getName())) {
+				if (player.getInventoryItems().get(i).getName().equals(item.getName())) {
 					System.out.println("attempting to give player item..1 " + item.getName());
-					player.getInventoryItems()[i].increaseQuantity(1);
+					player.getInventoryItems().get(i).increaseQuantity(1);
 					System.out.println("item given to player 1 " + item.getName());
 					break;
 
-				} else if (player.getInventoryItems()[i].getItemIndex() == 9) {
+				} else if (player.getInventoryItems().get(i).getItemIndex() == 9) {
 					System.out.println("attempting to give player item..2 " + item.getName());
-					player.getInventoryItems()[i] = item; // Add the item to the empty slot
+					player.getInventoryItems().set(i, item); // Add the item to the empty slot
 					System.out.println("item given to player 2 " + item.getName());
 					break;
 					 // Exit the loop after placing the item
@@ -47,10 +47,10 @@ public class InventoryManager {
 		if (player.getPlayerGold() >= item.getPrice()){
 
 		// First pass: check for an existing item with the same name
-		for (int i = 0; i < 5; i++) {
-			if (player.getInventoryItems()[i].getName().equals(item.getName())) {
+		for (int i = 0; i < player.getInventoryItems().size(); i++) {
+			if (player.getInventoryItems().get(i).getName().equals(item.getName())) {
 				System.out.println("attempting to buy item..1");
-				player.getInventoryItems()[i].increaseQuantity(1);
+				player.getInventoryItems().get(i).increaseQuantity(1);
 				player.decreaseGold(item.getPrice());
 				itemSold = true;
 				System.out.println("item sold " + item.getName());
@@ -59,10 +59,10 @@ public class InventoryManager {
 		}
 
 		// Second pass: find the first empty slot to add the item
-		for (int i = 0; i < 5; i++) {
-			if (player.getInventoryItems()[i].getItemIndex() == 9) {
+		for (int i = 0; i < player.getInventoryItems().size(); i++) {
+			if (player.getInventoryItems().get(i).getItemIndex() == 9) {
 				System.out.println("attempting to buy item..2");
-				player.getInventoryItems()[i] = item; // Add the item to the empty slot
+				player.getInventoryItems().set(i, item); // Add the item to the empty slot
 				player.decreaseGold(item.getPrice());
 				itemSold = true;
 				System.out.println("item sold " + item.getName());
@@ -85,12 +85,12 @@ public class InventoryManager {
 
 		boolean itemSold;
 
-		if(player.getPlayerItemIndex() >=0 || player.getPlayerItemIndex() <=4) {
+		if(player.getPlayerItemIndex() >=0 || player.getPlayerItemIndex() < player.getInventoryItems().size()) {
 
-			if (player.getInventoryItems()[player.getPlayerItemIndex()].getQuantity() < 2){
+			if (player.getInventoryItems().get(player.getPlayerItemIndex()).getQuantity() < 2){
 
 				System.out.println("Player sold: " + item.getName() + " for " + item.getPrice() + " Gold");
-				player.getInventoryItems()[player.getPlayerItemIndex()] = player.getEmptyItem();
+				player.getInventoryItems().set(player.getPlayerItemIndex(), player.getEmptyItem());
 				player.increaseGold(item.getPrice());
 				itemSold = true;
 
@@ -98,7 +98,7 @@ public class InventoryManager {
 			else {
 
 				System.out.println("Player sold: " + item.getName() + " for " + item.getPrice() + " Gold");
-				player.getInventoryItems()[player.getPlayerItemIndex()].increaseQuantity(-1);
+				player.getInventoryItems().get(player.getPlayerItemIndex()).increaseQuantity(-1);
 				player.increaseGold(item.getPrice());
 				itemSold = true;
 
@@ -126,7 +126,7 @@ public class InventoryManager {
 				currentItem.increaseQuantity(-1);
 			} else {
 				// Replace with an empty item
-				playerViewModel.getInventoryItems()[slotNumber] = playerViewModel.getEmptyItem();
+				playerViewModel.getInventoryItems().set(slotNumber, playerViewModel.getEmptyItem());
 			}
 			// Trigger LiveData update
 			playerViewModel.updatePlayerLiveData();
@@ -138,10 +138,10 @@ public class InventoryManager {
 		// Check if the slotNumber is valid
 		if (slotNumber >= 0 && slotNumber < 2) {
 			//set the item used = to a temporary currentItem variable
-			Item currentItem = player.getInventoryItems()[player.getPlayerItemIndex()];
+			Item currentItem = player.getInventoryItems().get(player.getPlayerItemIndex());
 
 			System.out.println(currentItem.getName());
-			if (player.getInventoryItems()[player.getPlayerItemIndex()].getName().equals(player.getEquippedItems()[currentItem.getItemIndex()].getName())){
+			if (player.getInventoryItems().get(player.getPlayerItemIndex()).getName().equals(player.getEquippedItems()[currentItem.getItemIndex()].getName())){
 
 				System.out.println("same item equipped");
 
@@ -159,7 +159,7 @@ public class InventoryManager {
 				} else if (currentItem.getQuantity() < 2) {
 
 					System.out.println("test3");
-					player.getInventoryItems()[player.getPlayerItemIndex()] = player.getEmptyItem();
+					player.getInventoryItems().set(player.getPlayerItemIndex(), player.getEmptyItem());
 					UnEquipItem(player,player.getEquippedItems()[currentItem.getItemIndex()]);
 					System.out.println("items name" + player.getEquippedItems()[currentItem.getItemIndex()].getName());
 					player.getEquippedItems()[currentItem.getItemIndex()] = currentItem;
@@ -186,43 +186,43 @@ public class InventoryManager {
 	public void UnEquipItem(PlayerViewModel player, Item item) {
 
 
-		for (int i = 0; i < player.getInventoryItems().length; i++){
-			if (player.getInventoryItems()[i].getName().equals(item.getName()) &&
-					player.getInventoryItems()[i].getType().equals(item.getType())){
+		for (int i = 0; i < player.getInventoryItems().size(); i++){
+			if (player.getInventoryItems().get(i).getName().equals(item.getName()) &&
+					player.getInventoryItems().get(i).getType().equals(item.getType())){
 
 				if (item instanceof WeaponItem){
 					player.getEquippedItems()[item.getItemIndex()] = player.getEmptyWeaponItem();
-					player.getInventoryItems()[i].increaseQuantity(1);
+					player.getInventoryItems().get(i).increaseQuantity(1);
 
 				}
 				if (item instanceof ArmorItem){
 					player.getEquippedItems()[item.getItemIndex()] = player.getEmptyArmorItem();
-					player.getInventoryItems()[i].increaseQuantity(1);
+					player.getInventoryItems().get(i).increaseQuantity(1);
 				}
-			} else if (player.getInventoryItems()[i] == player.getEmptyItem()) {
+			} else if (player.getInventoryItems().get(i) == player.getEmptyItem()) {
 
 				if (item.getName().equals("empty") && item.getType().equals("weapon")){
 					player.getEquippedItems()[item.getItemIndex()] = player.getEmptyWeaponItem();
-					player.getInventoryItems()[i] = player.getEmptyItem();
+					player.getInventoryItems().set(i, player.getEmptyItem());
 
 				}
 				if (item.getName().equals("empty") && item.getType().equals("armor")){
 					player.getEquippedItems()[item.getItemIndex()] = player.getEmptyArmorItem();
-					player.getInventoryItems()[i] = player.getEmptyItem();
+					player.getInventoryItems().set(i, player.getEmptyItem());
 				}
 			}
 		}
 
 		int slotNumber = 0;
-		while(!player.getInventoryItems()[slotNumber].getName().equals("empty") && slotNumber <4) {
+		while(!player.getInventoryItems().get(slotNumber).getName().equals("empty") && slotNumber < player.getInventoryItems().size()) {
 			slotNumber++;
 		}
-		if(player.getInventoryItems()[slotNumber].getName().equals("empty")) {
+		if(player.getInventoryItems().get(slotNumber).getName().equals("empty")) {
 			if(player.getEquippedItems()[item.getItemIndex()]==player.getEmptyWeaponItem() || player.getEquippedItems()[item.getItemIndex()]==player.getEmptyArmorItem()){
 
-				player.getInventoryItems()[slotNumber] = player.getEmptyItem();
+				player.getInventoryItems().set(slotNumber, player.getEmptyItem());
 			}else {
-				player.getInventoryItems()[slotNumber] = player.getEquippedItems()[item.getItemIndex()];
+				player.getInventoryItems().set(slotNumber, player.getEquippedItems()[item.getItemIndex()]);
 
 			}
 
@@ -245,7 +245,7 @@ public class InventoryManager {
 			player.setPlayerArmorValue(player.getCurrentArmor().getArmorValue());
 
 		}
-		else if(!player.getInventoryItems()[slotNumber].getName().equals("empty")) {
+		else if(!player.getInventoryItems().get(slotNumber).getName().equals("empty")) {
 			System.out.println("player inventory is full test");
 		}
 	}

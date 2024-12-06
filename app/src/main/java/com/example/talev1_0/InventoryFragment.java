@@ -26,8 +26,7 @@ public class InventoryFragment extends Fragment {
     private TextView selectedItemName, selectedItemPrice, selectedItemDamageValue, SelectedItemArmorValue, selectedItemHealingValue;
     private PlayerViewModel playerViewModel;
     private InventoryManager inventoryManager;
-    private int inventoryIndex, equipmentIndex;
-
+    private int equipmentIndex;
 
     @Nullable
     @Override
@@ -64,7 +63,6 @@ public class InventoryFragment extends Fragment {
         // Initialize ViewModel
         playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
         inventoryManager = new InventoryManager();
-        inventoryIndex = 0;
         equipmentIndex = 0;
 
     }
@@ -82,12 +80,12 @@ public class InventoryFragment extends Fragment {
         // Observe changes in the player's data
         playerViewModel.getPlayer().observe(getViewLifecycleOwner(), player -> {
             // Update the UI (e.g., display the current HP)
-            for (int i = 0; i < playerViewModel.getInventoryItems().length; i++)
-                if (playerViewModel.getInventoryItems()[i].getType().equals("empty")){
+            for (int i = 0; i < playerViewModel.getInventoryItems().size(); i++)
+                if (playerViewModel.getInventoryItems().get(i).getType().equals("empty")){
                     inventoryButtons[i].setText("");
                 }
                 else {
-                    inventoryButtons[i].setText(player.inventoryItems[i].ToString());
+                    inventoryButtons[i].setText(player.inventoryItems.get(i).ToString());
 
                 }
 
@@ -156,7 +154,6 @@ public class InventoryFragment extends Fragment {
     }
 
     public void setPlayerIndexesForSelectedItem(int index){
-        inventoryIndex = index;
         playerViewModel.setPlayerItemIndex(index);
         playerViewModel.setPlayerEquipmentIndex(playerViewModel.getInventoryItemAtIndex(index).getItemIndex());
         SetupUiForSelectedInventoryItem(index);

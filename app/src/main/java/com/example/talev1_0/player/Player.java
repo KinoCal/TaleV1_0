@@ -9,6 +9,9 @@ import com.example.talev1_0.gameItems.conreteClasses.equipment.WeaponItem;
 import com.example.talev1_0.gameItems.interfaces.Item_Empty;
 import com.example.talev1_0.gameItems.abstractClasses.Item;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
     Factories factory = new Factories();
     private WeaponItem currentWeapon;
@@ -32,13 +35,14 @@ public class Player {
     private int playerEquipmentIndex;
     private int playerInventoryIndex;
     private int shopItemIndex;
+    private int inventorySize;
     public Item empty = new Item_Empty();
     public Item emptyWeapon = new WeaponItem(0,"empty", "weapon", "empty", 0, 0, 1, 0);
     public Item emptyArmour = new ArmorItem(1,"empty", "armor", "empty", 0, 0, 1, 0);
 
 
     public Item[] equippedItems = new Item[2];
-    public Item[] inventoryItems = new Item[5];
+    public List <Item> inventoryItems = new ArrayList<>();
 
 
     public Player() {
@@ -47,11 +51,11 @@ public class Player {
         equippedItems[1] = emptyArmour;
 
 
-        inventoryItems[0] = empty;
-        inventoryItems[1] = empty;
-        inventoryItems[2] = empty;
-        inventoryItems[3] = empty;
-        inventoryItems[4] = empty;
+        inventoryItems.add(empty);
+        inventoryItems.add(empty);
+        inventoryItems.add(empty);
+        inventoryItems.add(empty);
+        inventoryItems.add(empty);
 
         currentWeapon = (WeaponItem) equippedItems[0];
         currentArmor = (ArmorItem) equippedItems[1];
@@ -68,6 +72,7 @@ public class Player {
         currentExp = 0;
         maxExp = level * 10;
         gold = 100;
+        inventorySize = 5;
         playerAlive = true;
 
 
@@ -89,11 +94,11 @@ public class Player {
 
     public Item getInventoryItem(int index){
 
-        return inventoryItems[index];
+        return inventoryItems.get(index);
     }
 
     public void setInventoryItem(Item item, int index){
-        inventoryItems[index] = item;
+        inventoryItems.set(index, item);
     }
 
     public boolean isInventoryFull(){
@@ -386,7 +391,7 @@ public class Player {
 
     public boolean isInventoryIndexEmpty(int index){
         Boolean isEmpty;
-        if (inventoryItems[index].getName().isEmpty()){
+        if (inventoryItems.get(index).getName().isEmpty()){
             isEmpty = true;
         }else {
             isEmpty = false;
@@ -400,6 +405,14 @@ public class Player {
 
     public void setEnemyName(String enemyName) {
         this.enemyName = enemyName;
+    }
+
+    public int getInventorySize() {
+        return inventorySize;
+    }
+
+    public void setInventorySize(int inventorySize) {
+        this.inventorySize = inventorySize;
     }
 
 }

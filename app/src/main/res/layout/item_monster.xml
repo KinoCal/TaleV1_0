@@ -1,0 +1,30 @@
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/border"
+        android:padding="8dp">
+
+    <TextView
+            android:id="@+id/monster_name_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Monster Name"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    <Button
+            android:id="@+id/drop_table_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:text="Drop Table" />
+
+    <Button
+            android:id="@+id/fight_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fight" />
+</LinearLayout>

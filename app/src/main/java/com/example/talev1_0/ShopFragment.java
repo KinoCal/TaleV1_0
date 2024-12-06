@@ -91,12 +91,12 @@ public class ShopFragment extends Fragment {
         // Observe changes in the player's data
         playerViewModel.getPlayer().observe(getViewLifecycleOwner(), player -> {
             // Update the UI (e.g., display the current HP)
-            for (int i = 0; i < playerViewModel.getInventoryItems().length; i++)
-                if (player.inventoryItems[i] instanceof Item_Empty){
+            for (int i = 0; i < playerViewModel.getInventoryItems().size(); i++)
+                if (player.inventoryItems.get(i) instanceof Item_Empty){
                     inventoryButtons[i].setText("");
                 }
                 else {
-                    inventoryButtons[i].setText(player.inventoryItems[i].ToString());
+                    inventoryButtons[i].setText(player.inventoryItems.get(i).ToString());
 
                 }
 

@@ -88,24 +88,17 @@ public class PlayerViewModel extends AndroidViewModel {
         player.setGold(entity.getGold());
 
         // Retrieve inventory items
-        InventoryEntity inventoryEntity1 = DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(1);
-        InventoryEntity inventoryEntity2 = DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(2);
-        InventoryEntity inventoryEntity3 = DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(3);
-        InventoryEntity inventoryEntity4 = DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(4);
-        InventoryEntity inventoryEntity5 = DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(5);
+        List<InventoryEntity> inventoryEntities = new ArrayList<>();
+        for (int i = 1; i < player.getInventorySize()+1; i++){
+            inventoryEntities.add(DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(i));
+        }
 
         // Correctly pass the correct inventory name for each item
-        player.setInventoryItem(factories.createItem(inventoryEntity1.getType(), inventoryEntity1.getName()), 0);
-        player.setInventoryItem(factories.createItem(inventoryEntity2.getType(), inventoryEntity2.getName()), 1);
-        player.setInventoryItem(factories.createItem(inventoryEntity3.getType(), inventoryEntity3.getName()), 2);
-        player.setInventoryItem(factories.createItem(inventoryEntity4.getType(), inventoryEntity4.getName()), 3);
-        player.setInventoryItem(factories.createItem(inventoryEntity5.getType(), inventoryEntity5.getName()), 4);
+        for (int i = 0; i < player.getInventorySize(); i++){
+            player.setInventoryItem(factories.createItem(inventoryEntities.get(i).getType(), inventoryEntities.get(i).getName()), i);
+            player.getInventoryItem(i).setQuantity(inventoryEntities.get(i).getQuantity());
+        }
 
-        player.getInventoryItem(0).setQuantity(inventoryEntity1.getQuantity());
-        player.getInventoryItem(1).setQuantity(inventoryEntity2.getQuantity());
-        player.getInventoryItem(2).setQuantity(inventoryEntity3.getQuantity());
-        player.getInventoryItem(3).setQuantity(inventoryEntity4.getQuantity());
-        player.getInventoryItem(4).setQuantity(inventoryEntity5.getQuantity());
 
         // Retrieve equipment items
         EquipmentEntity equipmentEntity1 = DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().getEquipmentById(1);
@@ -162,7 +155,7 @@ public class PlayerViewModel extends AndroidViewModel {
             DatabaseClient.getInstance(application).getAppDatabase().playerDao().insertPlayer(playerEntity);
 
             // Save the player's inventory data
-            for (int i = 0; i < player.inventoryItems.length; i++) {
+            for (int i = 0; i < player.inventoryItems.size(); i++) {
                 // Retrieve the corresponding InventoryEntity from the database
                 InventoryEntity inventoryEntity = DatabaseClient.getInstance(application)
                         .getAppDatabase()
@@ -300,7 +293,7 @@ public class PlayerViewModel extends AndroidViewModel {
         return player.equippedItems;
     }
 
-    public Item[] getInventoryItems(){
+    public List<Item> getInventoryItems(){
         return playerLiveData.getValue().inventoryItems;
     }
 
