@@ -24,7 +24,7 @@ public interface MonsterInterface {
     public int getXpValue();
     public void setXpValue(int xpValue);
     public List<Item> getLootTable();
-    public void addItemToLootTable(Item item);
+    public void addItemToLootTable(String type, String name);
     public Item getItemFromLootTable(int index);
 
 }

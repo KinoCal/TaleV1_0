@@ -13,8 +13,12 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.talev1_0.adapters.MonsterAdapter;
 import com.example.talev1_0.monsters.BaseMonster;
+import com.example.talev1_0.monsters.DragonMonster;
 import com.example.talev1_0.monsters.GoblinMonster;
 import com.example.talev1_0.player.PlayerViewModel;
 import com.example.talev1_0.gameItems.abstractClasses.Item;
@@ -23,10 +27,11 @@ import java.util.List;
 
 public class MapFragment extends Fragment {
 
-    private TextView monsterNameTextView;
-    private Button dropTableButton, fightButton;
+    private RecyclerView goblinCaveRecyclerView;
     private Button goblinCaveButton;
-    private ConstraintLayout goblinCaveLayout;
+    private RecyclerView dragonDenRecyclerView;
+    private Button dragonDenButton;
+
     private FragmentChangeListener fragmentChangeListener;
     private PlayerViewModel playerViewModel;
 
@@ -45,11 +50,13 @@ public class MapFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        goblinCaveLayout = view.findViewById(R.id.goblin_cave_layout);
         goblinCaveButton = view.findViewById(R.id.goblin_cave_button);
-        monsterNameTextView = view.findViewById(R.id.monster_name_textview);
-        dropTableButton = view.findViewById(R.id.drop_table_button);
-        fightButton = view.findViewById(R.id.fight_button);
+        goblinCaveRecyclerView = view.findViewById(R.id.goblin_cave_recycler_view);
+        goblinCaveRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        dragonDenButton = view.findViewById(R.id.dragon_den_button);
+        dragonDenRecyclerView = view.findViewById(R.id.dragon_den_recycler_view);
+        dragonDenRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize PlayerViewModel
         playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
@@ -61,34 +68,39 @@ public class MapFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        goblinCaveButton.setOnClickListener(v ->{
-            if (goblinCaveLayout.getVisibility() == View.VISIBLE) {
-                goblinCaveLayout.setVisibility(View.GONE); // Hide the layout
-            } else {
-                goblinCaveLayout.setVisibility(View.VISIBLE); // Show the layout
-            }
-        });
+        // Setup Goblin Cave
+        List<BaseMonster> goblinCaveMonsters = List.of(new GoblinMonster(), new GoblinMonster());
+        MonsterAdapter goblinCaveAdapter = new MonsterAdapter(goblinCaveMonsters, this::showMonsterDropTable, this::startFight);
+        goblinCaveRecyclerView.setAdapter(goblinCaveAdapter);
+        goblinCaveButton.setOnClickListener(v -> toggleRecyclerViewVisibility(goblinCaveRecyclerView));
 
-        dropTableButton.setOnClickListener(v -> {
-            // Simulate selecting a monster (e.g., Goblin)
-            GoblinMonster goblinMonster = new GoblinMonster();
-            showMonsterDropTable(goblinMonster);
-        });
-
-        fightButton.setOnClickListener(v -> {
-            if (fragmentChangeListener != null) {
-                fragmentChangeListener.onFragmentChange("BattleArea");
-                playerViewModel.setEnemyName("Goblin");
-            }
-        });
+        // Setup Dragon Den
+        List<BaseMonster> dragonDenMonsters = List.of(new DragonMonster(), new DragonMonster());
+        MonsterAdapter dragonDenAdapter = new MonsterAdapter(dragonDenMonsters, this::showMonsterDropTable, this::startFight);
+        dragonDenRecyclerView.setAdapter(dragonDenAdapter);
+        dragonDenButton.setOnClickListener(v -> toggleRecyclerViewVisibility(dragonDenRecyclerView));
     }
 
-    public void showMonsterDropTable(BaseMonster monster){
-        List<Item> lootTable = monster.getLootTable(); // List is sufficient
+    private void toggleRecyclerViewVisibility(RecyclerView recyclerView) {
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showMonsterDropTable(BaseMonster monster) {
+        List<Item> lootTable = monster.getLootTable();
 
         LootDialogFragment dialogFragment = new LootDialogFragment();
-        dialogFragment.setLootTable(lootTable); // Pass the lootTable directly
+        dialogFragment.setLootTable(lootTable);
         dialogFragment.show(getParentFragmentManager(), "LootDialog");
     }
 
+    private void startFight(BaseMonster monster) {
+        if (fragmentChangeListener != null) {
+            fragmentChangeListener.onFragmentChange("BattleArea");
+            playerViewModel.setEnemyName(monster.getName());
+        }
+    }
 }

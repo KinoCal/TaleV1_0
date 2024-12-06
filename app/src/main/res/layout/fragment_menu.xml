@@ -3,11 +3,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@drawable/border"
-        android:layout_margin="6dp"
+        android:background="@color/light_gray_foreground"
         android:padding="8dp">
 
     <!-- Trigger for Dropdown Menu -->

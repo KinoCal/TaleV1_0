@@ -13,12 +13,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="12dp"
-
             >
 
         <!-- Inventory Section (Vertical List of Buttons) -->
         <LinearLayout
-                android:background="@drawable/border"
+                android:background="@drawable/border_rounded"
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -62,7 +61,7 @@
 
         <!-- Equipment Section (Custom Button Layout) -->
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:background="@drawable/border"
+                android:background="@drawable/border_rounded"
                 android:layout_margin="6dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -114,7 +113,7 @@
 
         <!-- Equipment Actions Section (Equip/Unequip and TextViews) -->
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:background="@drawable/border"
+                android:background="@drawable/border_rounded"
                 android:layout_margin="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

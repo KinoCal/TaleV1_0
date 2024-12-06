@@ -1,5 +1,6 @@
 package com.example.talev1_0.monsters;
 
+import com.example.talev1_0.Factories.ItemFactories.Factories;
 import com.example.talev1_0.gameItems.abstractClasses.Item;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,9 @@ public abstract class BaseMonster implements MonsterInterface {
     private int maxHp;
     private int xp;
     private List<Item> lootTable;
+    private Factories factories;
 
-    public BaseMonster(String name, String type, int level, int damage, int armor, int hp, int xp) {
+    public BaseMonster(String name, String type, int hp, int level, int damage, int armor) {
         this.name = name;
         this.type = type;
         this.level = level;
@@ -24,8 +26,9 @@ public abstract class BaseMonster implements MonsterInterface {
         this.armor = armor;
         this.hp = hp;
         this.maxHp = hp;
-        this.xp = xp;
+        this.xp = level *3;
         this.lootTable = new ArrayList<>(); // Initialize as an empty ArrayList
+        this.factories = new Factories();
     }
 
     @Override
@@ -34,8 +37,9 @@ public abstract class BaseMonster implements MonsterInterface {
     }
 
     @Override
-    public void addItemToLootTable(Item item) {
-        lootTable.add(item);
+    public void addItemToLootTable(String type, String name) {
+
+        lootTable.add(factories.createItem(type,name));
     }
 
     @Override
@@ -132,7 +136,7 @@ public abstract class BaseMonster implements MonsterInterface {
 
     @Override
     public void setXpValue(int xpValue) {
-        xp += xpValue;
+        xp = xpValue;
     }
 
 }

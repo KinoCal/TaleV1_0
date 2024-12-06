@@ -4,24 +4,22 @@ import com.example.talev1_0.Factories.ItemFactories.Factories;
 
 public class GoblinMonster extends BaseMonster implements MonsterInterface {
 
-    Factories factories = new Factories();
-
     public GoblinMonster() {
-        super("Goblin", "Monster", 2, 2, 1, 10, 6);
+        super("Goblin", "Monster", 10, 2, 3, 1);
 
         //Common
-        addItemToLootTable(factories.createItem("weapon", "Dagger"));
-        addItemToLootTable(factories.createItem("weapon", "ShortSword"));
-        addItemToLootTable(factories.createItem("armor", "ClothBody"));
-        addItemToLootTable(factories.createItem("consumable", "Hp Potion"));
+        addItemToLootTable("weapon", "Dagger");
+        addItemToLootTable("weapon", "Short Sword");
+        addItemToLootTable("armor", "Cloth Body");
+        addItemToLootTable("consumable", "Hp Potion");
         //Rare
-        addItemToLootTable(factories.createItem("weapon", "Sword"));
-        addItemToLootTable(factories.createItem("weapon", "LongSword"));
-        addItemToLootTable(factories.createItem("armor", "GoblinArmor"));
+        addItemToLootTable("weapon", "Sword");
+        addItemToLootTable("weapon", "Long Sword");
+        addItemToLootTable("armor", "Goblin Armor");
         //Epic
-        addItemToLootTable(factories.createItem("weapon", "Mace"));
+        addItemToLootTable("weapon", "Mace");
         //Legendary
-        addItemToLootTable(factories.createItem("weapon", "GodSword"));
+        addItemToLootTable("weapon", "God Sword");
 
     }
 }

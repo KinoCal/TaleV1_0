@@ -130,10 +130,10 @@ public class PlayerViewModel extends AndroidViewModel {
             } else {
                 // No player found, create a new one
                 player = new Player(); // Initialize new player data
-                savePlayerToDatabase(player, playerId); // Save to database with the given ID
-
-                initializeInventoryInDatabase(playerId);
                 initializeEquipmentInDatabase();
+                savePlayerToDatabase(player, playerId); // Save to database with the given ID
+                initializeInventoryInDatabase(playerId);
+
 
             }
 

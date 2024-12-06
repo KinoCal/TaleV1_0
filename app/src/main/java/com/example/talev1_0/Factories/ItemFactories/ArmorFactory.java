@@ -11,9 +11,9 @@ public class ArmorFactory implements ItemFactory {
         return switch (itemName) {
             case "empty" -> new ArmorItem(1, "empty", "armor", "empty", 0, 0, 0, 1);
             //Common
-            case "ClothBody" -> new ArmorItem(1, "ClothBody", "armor", "common", 2, 1, 1, RarityValues.COMMON);
+            case "Cloth Body" -> new ArmorItem(1, "Cloth Body", "armor", "common", 2, 1, 1, RarityValues.COMMON);
             //Rare
-            case "GoblinArmor" -> new ArmorItem(1, "GoblinArmor", "armor", "rare", 4, 2, 1, RarityValues.RARE);
+            case "Goblin Armor" -> new ArmorItem(1, "Goblin Armor", "armor", "rare", 4, 2, 1, RarityValues.RARE);
             default -> throw new IllegalArgumentException("Unknown item type: " + itemName);
         };
     }

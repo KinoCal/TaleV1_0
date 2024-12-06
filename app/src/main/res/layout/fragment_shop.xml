@@ -16,7 +16,7 @@
 
         <!-- Inventory Section (Vertical List of Buttons) -->
         <LinearLayout
-                android:background="@drawable/border"
+                android:background="@drawable/border_rounded"
 
                 android:layout_marginTop="12dp"
                 android:orientation="vertical"
@@ -60,7 +60,7 @@
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:background="@drawable/border"
+                android:background="@drawable/border_rounded"
                 android:layout_marginTop="6dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -71,66 +71,60 @@
                 android:padding="8dp">
 
             <TextView
-                    android:text="Shop item's"
+                    android:text="Shop items"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/shop_items_title"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/shop_item_1"
-                    android:textSize="28sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-            <Button
-
-                    android:id="@+id/shop_item_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="item1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintEnd_toStartOf="@+id/shop_item_2"
-                    app:layout_constraintHorizontal_chainStyle="spread"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-            <Button
-
-                    android:id="@+id/shop_item_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="item2"
-                    app:layout_constraintStart_toEndOf="@+id/shop_item_1"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintEnd_toStartOf="@+id/shop_item_3"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-            <Button
-
-                    android:id="@+id/shop_item_3"
-                    android:text="item3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@+id/shop_item_2"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintEnd_toStartOf="@+id/shop_item_4"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-            <Button
-
-                    android:id="@+id/shop_item_4"
-                    android:text="item4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@+id/shop_item_3"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:textSize="28sp" />
+
+            <Button
+                    android:id="@+id/shop_item_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Item 1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/shop_item_2"
+                    app:layout_constraintTop_toBottomOf="@id/shop_items_title"
                     app:layout_constraintBottom_toBottomOf="parent" />
-            <!-- Add more equipment buttons if needed -->
+
+            <Button
+                    android:id="@+id/shop_item_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Item 2"
+                    app:layout_constraintStart_toEndOf="@+id/shop_item_1"
+                    app:layout_constraintEnd_toStartOf="@+id/shop_item_3"
+                    app:layout_constraintTop_toBottomOf="@id/shop_items_title"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            <Button
+                    android:id="@+id/shop_item_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Item 3"
+                    app:layout_constraintStart_toEndOf="@+id/shop_item_2"
+                    app:layout_constraintEnd_toStartOf="@+id/shop_item_4"
+                    app:layout_constraintTop_toBottomOf="@id/shop_items_title"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            <Button
+                    android:id="@+id/shop_item_4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Item 4"
+                    app:layout_constraintStart_toEndOf="@+id/shop_item_3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/shop_items_title"
+                    app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <!-- Equipment Actions Section (Equip/Unequip and TextViews) -->
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:background="@drawable/border"
+                android:background="@drawable/border_rounded"
                 android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
