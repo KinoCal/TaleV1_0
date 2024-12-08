@@ -1,8 +1,13 @@
 package com.example.talev1_0;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
     private static final int MAIN_FRAGMENT_CONTAINER_ID = R.id.main_fragment_container;
     private static final int PLAYER_INFO_FRAGMENT_CONTAINER_ID = R.id.player_info_fragment_container;
     private static final int MENU_FRAGMENT_CONTAINER_ID = R.id.menu_fragment_container;
+    //private static final int PLAYER_CHAT_WINDOW_CONTAINER_ID = R.id.player_chat_fragment_container;
 
 
     @Override
@@ -25,6 +31,18 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Check for internet connectivity
+        if (isInternetAvailable()) {
+            Toast.makeText(this, "Internet is available", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+        }
+
+        // Load the ChatFragment
+        /*getSupportFragmentManager().beginTransaction()
+                .replace(PLAYER_CHAT_WINDOW_CONTAINER_ID, new ChatFragment())
+                .commit();
+*/
         // Load the MenuFragment
         getSupportFragmentManager().beginTransaction()
                 .replace(MENU_FRAGMENT_CONTAINER_ID, new MenuFragment())
@@ -38,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
         // Load the default main fragment (e.g., MapFragment)
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(MAIN_FRAGMENT_CONTAINER_ID, new BattleAreaFragment())
+                    .replace(MAIN_FRAGMENT_CONTAINER_ID, new InventoryFragment())
                     .commit();
         }
     }
@@ -89,6 +107,14 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
             case "BattleArea":
                 fragment = new BattleAreaFragment();
                 break;
+
+            case "InventoryFragment":
+                fragment = new InventoryFragment();
+                break;
+
+            case "MapFragment":
+                fragment = new MapFragment();
+                break;
             // Handle other fragment transitions if needed
             default:
                 fragment = new MapFragment();
@@ -99,5 +125,21 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
                 .replace(R.id.main_fragment_container, fragment, fragmentTag)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private boolean isInternetAvailable() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        Network network = connectivityManager.getActiveNetwork();
+        if (network == null) {
+            return false; // No active network
+        }
+
+        NetworkCapabilities capabilities =
+                connectivityManager.getNetworkCapabilities(network);
+
+        return capabilities != null &&
+                capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
     }
 }

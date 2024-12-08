@@ -13,6 +13,10 @@ public interface MonsterInterface {
     public void setType();
     public int getLevel();
     public void setLevel(int level);
+    public double getAttackSpeed();
+    public void setAttackSpeed(double amount);
+    public int getDamageDealt();
+    public void setDamageDealt(int amount);
     public int getDamageValue();
     public void setDamageValue(int damageValue);
     public int getArmorValue();

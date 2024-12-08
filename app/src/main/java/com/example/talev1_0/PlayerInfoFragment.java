@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.example.talev1_0.player.PlayerViewModel;
 public class PlayerInfoFragment extends Fragment {
     private PlayerViewModel playerViewModel;
     private TextView textViewHp, textViewGold, textViewLevel, textViewExp;
+    private ProgressBar playerHpProgressBar;
 
     @Nullable
     @Override
@@ -24,6 +26,7 @@ public class PlayerInfoFragment extends Fragment {
         textViewGold = view.findViewById(R.id.player_gold_textview);
         textViewLevel = view.findViewById(R.id.player_level_textview);
         textViewExp = view.findViewById(R.id.player_current_exp_textview);
+        playerHpProgressBar = view.findViewById(R.id.player_hp_progressbar);
 
         return view;
     }
@@ -37,12 +40,14 @@ public class PlayerInfoFragment extends Fragment {
 
 
         // Observe the Player object
-        playerViewModel.getPlayer().observe(getViewLifecycleOwner(), player -> {
+        playerViewModel.getPlayerLiveData().observe(getViewLifecycleOwner(), player -> {
             // Update UI when the Player object changes
-            textViewHp.setText("HP: " + player.getCurrentHp());
+            textViewHp.setText("HP: " + player.getCurrentHp() + "/" + player.getMaxHp());
             textViewLevel.setText("Lvl: " + player.getLevel());
             textViewExp.setText("Exp: " + player.getCurrentExp() + "/" + player.getMaxExp());
             textViewGold.setText("Gold: " + player.getGold());
+            playerHpProgressBar.setMax(player.getMaxHp());
+            playerHpProgressBar.setProgress(player.getCurrentHp());
         });
     }
 

@@ -41,11 +41,11 @@ public class PlayerViewModel extends AndroidViewModel {
             List<InventoryEntity> inventoryItems = new ArrayList<>();
 
             // Add default items to the list
+
+            for (int i = 0; i < player.getInventorySize(); i++){
             inventoryItems.add(new InventoryEntity(playerId, "empty", "empty", 1));
-            inventoryItems.add(new InventoryEntity(playerId, "empty", "empty", 1));
-            inventoryItems.add(new InventoryEntity(playerId, "empty", "empty", 1));
-            inventoryItems.add(new InventoryEntity(playerId, "empty", "empty", 1));
-            inventoryItems.add(new InventoryEntity(playerId, "empty", "empty", 1));
+
+            }
 
             // Insert the items into the inventory table
             DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().insertAll(inventoryItems);
@@ -207,7 +207,7 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<Player> getPlayer() {
+    public LiveData<Player> getPlayerLiveData() {
         return playerLiveData;
     }
 
@@ -396,5 +396,54 @@ public class PlayerViewModel extends AndroidViewModel {
     public String getEnemyName(){
         return player.getEnemyName();
     }
+
+    public String getUserName(){
+        return player.getUserName();
+    }
+
+    public void setUserName(String username){
+        player.setUserName(username);
+        playerLiveData.setValue(player);
+    }
+
+    public String getPassword(){
+        return player.getPassword();
+    }
+
+    public void setPassword(String password){
+        player.setPassword(password);
+    }
+
+    public Player getPlayer(){
+        return player;
+    }
+
+    public void setDamageDealt(int amount){
+        player.setDamageDealt(amount);
+        playerLiveData.setValue(player);
+    }
+
+    public void increaseInventorySize(int additionalSlots) {
+        new Thread(() -> {
+            if (player != null) {
+                int currentSize = player.getInventorySize();
+                int newSize = currentSize + additionalSlots;
+
+                // Update inventory size
+                player.setInventorySize(newSize);
+
+                // Add empty items to the inventory list
+                for (int i = currentSize; i < newSize; i++) {
+                    player.inventoryItems.add(player.empty);
+                    DatabaseClient.getInstance(application).getAppDatabase().inventoryDao()
+                            .insertInventory(new InventoryEntity(1, "empty", "empty", 1));
+                }
+
+                // Notify observers
+                playerLiveData.postValue(player);
+            }
+        }).start();
+    }
+
 }
 

@@ -11,7 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.talev1_0.adapters.InventoryAdapter;
 import com.example.talev1_0.gameItems.abstractClasses.Item;
 import com.example.talev1_0.gameItems.conreteClasses.Consumables.ConsumableItem;
 import com.example.talev1_0.gameItems.conreteClasses.equipment.ArmorItem;
@@ -21,22 +25,23 @@ import com.example.talev1_0.handlers.InventoryManager;
 import com.example.talev1_0.player.PlayerViewModel;
 
 public class InventoryFragment extends Fragment {
-    private Button[] inventoryButtons = new Button[5];
     private Button  useButton, equipButton, unequipButton, equippedWeaponButton, equippedArmorButton;
     private TextView selectedItemName, selectedItemPrice, selectedItemDamageValue, SelectedItemArmorValue, selectedItemHealingValue;
     private PlayerViewModel playerViewModel;
     private InventoryManager inventoryManager;
+    private RecyclerView inventoryRecyclerView;
     private int equipmentIndex;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inventory, container, false);
-        inventoryButtons[0] = view.findViewById(R.id.inventory_item_1);
-        inventoryButtons[1] = view.findViewById(R.id.inventory_item_2);
-        inventoryButtons[2] = view.findViewById(R.id.inventory_item_3);
-        inventoryButtons[3] = view.findViewById(R.id.inventory_item_4);
-        inventoryButtons[4] = view.findViewById(R.id.inventory_item_5);
+
+        //inventoryItemTextView = view.findViewById(R.id.inventory_item_text_view);
+        inventoryRecyclerView = view.findViewById(R.id.inventory_recycler_view);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 3); // 3 columns
+        inventoryRecyclerView.setLayoutManager(gridLayoutManager);
+
 
         useButton = view.findViewById(R.id.use_button);
         equipButton = view.findViewById(R.id.equip_button);
@@ -61,6 +66,7 @@ public class InventoryFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // Initialize ViewModel
+
         playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
         inventoryManager = new InventoryManager();
         equipmentIndex = 0;
@@ -78,51 +84,18 @@ public class InventoryFragment extends Fragment {
 
 
         // Observe changes in the player's data
-        playerViewModel.getPlayer().observe(getViewLifecycleOwner(), player -> {
+        playerViewModel.getPlayerLiveData().observe(getViewLifecycleOwner(), player -> {
             // Update the UI (e.g., display the current HP)
-            for (int i = 0; i < playerViewModel.getInventoryItems().size(); i++)
-                if (playerViewModel.getInventoryItems().get(i).getType().equals("empty")){
-                    inventoryButtons[i].setText("");
-                }
-                else {
-                    inventoryButtons[i].setText(player.inventoryItems.get(i).ToString());
+            InventoryAdapter inventoryAdapter = new InventoryAdapter(player.inventoryItems, this::setPlayerIndexesForSelectedItem);
+            inventoryRecyclerView.setAdapter(inventoryAdapter);
 
-                }
-
+            inventoryAdapter.notifyDataSetChanged();
             equippedWeaponButton.setText(playerViewModel.getEquippedItemAtIndex(0).getName());
             equippedArmorButton.setText(playerViewModel.getEquippedItemAtIndex(1).getName());
         });
 
 
-        inventoryButtons[0].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(0);
-            SetupUiForSelectedInventoryItem(0);
 
-        });
-
-        inventoryButtons[1].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(1);
-            SetupUiForSelectedInventoryItem(1);
-
-        });
-
-        inventoryButtons[2].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(2);
-            SetupUiForSelectedInventoryItem(2);
-
-        });
-
-        inventoryButtons[3].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(3);
-            SetupUiForSelectedInventoryItem(3);
-
-        });
-
-        inventoryButtons[4].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(4);
-            SetupUiForSelectedInventoryItem(4);
-
-        });
 
         // EQUIPMENT BUTTONS
         equippedWeaponButton.setOnClickListener(v -> {
@@ -153,7 +126,7 @@ public class InventoryFragment extends Fragment {
 
     }
 
-    public void setPlayerIndexesForSelectedItem(int index){
+    public void setPlayerIndexesForSelectedItem(Item inventoryItem, int index){
         playerViewModel.setPlayerItemIndex(index);
         playerViewModel.setPlayerEquipmentIndex(playerViewModel.getInventoryItemAtIndex(index).getItemIndex());
         SetupUiForSelectedInventoryItem(index);

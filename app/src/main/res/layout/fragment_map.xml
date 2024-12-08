@@ -1,18 +1,18 @@
         <ScrollView
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
-                android:layout_marginTop="76dp"
+                android:layout_marginTop="70dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/dark_gray_background">
 
                 <LinearLayout
-                        android:background="@drawable/border_rounded"
+                        android:background="@drawable/border"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="8dp"
-                        android:layout_margin="6dp">
+                        android:layout_marginTop="6dp">
 
                         <!-- Goblin Cave -->
                         <Button

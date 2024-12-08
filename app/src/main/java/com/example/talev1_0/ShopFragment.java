@@ -13,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.talev1_0.NPCS.TavernShopKeeper;
+import com.example.talev1_0.adapters.InventoryAdapter;
 import com.example.talev1_0.gameItems.abstractClasses.Item;
 import com.example.talev1_0.gameItems.conreteClasses.Consumables.ConsumableItem;
 import com.example.talev1_0.gameItems.conreteClasses.equipment.ArmorItem;
@@ -24,13 +27,13 @@ import com.example.talev1_0.handlers.InventoryManager;
 import com.example.talev1_0.player.PlayerViewModel;
 
 public class ShopFragment extends Fragment {
-    private Button[] inventoryButtons = new Button[5];
     private Button[] shopButtons = new Button[4];
     private Button buyButton, sellButton;
     private TextView selectedItemName, selectedItemPrice, selectedItemDamageValue, SelectedItemArmorValue, selectedItemHealingValue;
     private PlayerViewModel playerViewModel;
     private TavernShopKeeper tavernShopKeeper;
     private InventoryManager inventoryManager;
+    private RecyclerView inventoryRecyclerView;
     private int inventoryIndex, equipmentIndex;
 
 
@@ -38,11 +41,6 @@ public class ShopFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shop, container, false);
-        inventoryButtons[0] = view.findViewById(R.id.inventory_item_1);
-        inventoryButtons[1] = view.findViewById(R.id.inventory_item_2);
-        inventoryButtons[2] = view.findViewById(R.id.inventory_item_3);
-        inventoryButtons[3] = view.findViewById(R.id.inventory_item_4);
-        inventoryButtons[4] = view.findViewById(R.id.inventory_item_5);
 
         shopButtons[0] = view.findViewById(R.id.shop_item_1);
         shopButtons[1] = view.findViewById(R.id.shop_item_2);
@@ -51,6 +49,9 @@ public class ShopFragment extends Fragment {
 
         buyButton = view.findViewById(R.id.buy_item_button);
         sellButton = view.findViewById(R.id.sell_item_button);
+
+        inventoryRecyclerView = view.findViewById(R.id.inventory_shop_recycler_view);
+        inventoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         selectedItemName = view.findViewById(R.id.selected_item_name);
         selectedItemPrice = view.findViewById(R.id.selected_item_price);
@@ -89,71 +90,36 @@ public class ShopFragment extends Fragment {
         }
         // Get the ViewModel
         // Observe changes in the player's data
-        playerViewModel.getPlayer().observe(getViewLifecycleOwner(), player -> {
+        playerViewModel.getPlayerLiveData().observe(getViewLifecycleOwner(), player -> {
             // Update the UI (e.g., display the current HP)
-            for (int i = 0; i < playerViewModel.getInventoryItems().size(); i++)
-                if (player.inventoryItems.get(i) instanceof Item_Empty){
-                    inventoryButtons[i].setText("");
-                }
-                else {
-                    inventoryButtons[i].setText(player.inventoryItems.get(i).ToString());
-
-                }
+            InventoryAdapter inventoryAdapter = new InventoryAdapter(player.inventoryItems, this::setPlayerIndexesForSelectedItem);
+            inventoryRecyclerView.setAdapter(inventoryAdapter);
 
         });
 
 
-        inventoryButtons[0].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(0);
-            SetupUiForSelectedInventoryItem(0);
-
-        });
-
-        inventoryButtons[1].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(1);
-            SetupUiForSelectedInventoryItem(1);
-
-        });
-
-        inventoryButtons[2].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(2);
-            SetupUiForSelectedInventoryItem(2);
-
-        });
-
-        inventoryButtons[3].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(3);
-            SetupUiForSelectedInventoryItem(3);
-
-        });
-
-        inventoryButtons[4].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(4);
-            SetupUiForSelectedInventoryItem(4);
-
-        });
 
         // SHOPKEEPER BUTTONS
         shopButtons[0].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(0);
+            setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0), 0);
             SetupUiForSelectedShopItem(0);
 
         });
 
         shopButtons[1].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(1);
+            setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0),1);
             SetupUiForSelectedShopItem(1);
 
         });
 
         shopButtons[2].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(2);
+            setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0),2);
             SetupUiForSelectedShopItem(2);
 
         });
 
         shopButtons[3].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(3);
+            setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0),3);
             SetupUiForSelectedShopItem(3);
 
         });
@@ -214,11 +180,12 @@ public class ShopFragment extends Fragment {
         }
     }
 
-    public void setPlayerIndexesForSelectedItem(int index){
+    public void setPlayerIndexesForSelectedItem(Item item, int index){
         inventoryIndex = index;
         playerViewModel.setPlayerItemIndex(index);
         playerViewModel.setPlayerEquipmentIndex(playerViewModel.getInventoryItemAtIndex(index).getItemIndex());
         playerViewModel.setPlayerShopItemIndex(index);
+        SetupUiForSelectedInventoryItem(index);
     }
 
     @SuppressLint("SetTextI18n")

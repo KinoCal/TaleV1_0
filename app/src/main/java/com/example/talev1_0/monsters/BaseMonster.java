@@ -15,6 +15,8 @@ public abstract class BaseMonster implements MonsterInterface {
     private int hp;
     private int maxHp;
     private int xp;
+    private double attackSpeed;
+    private int damageDealt;
     private List<Item> lootTable;
     private Factories factories;
 
@@ -27,6 +29,8 @@ public abstract class BaseMonster implements MonsterInterface {
         this.hp = hp;
         this.maxHp = hp;
         this.xp = level *3;
+        this.attackSpeed = 4.0;
+        this.damageDealt = 0;
         this.lootTable = new ArrayList<>(); // Initialize as an empty ArrayList
         this.factories = new Factories();
     }
@@ -87,6 +91,26 @@ public abstract class BaseMonster implements MonsterInterface {
     @Override
     public void setLevel(int levelValue) {
         level += levelValue;
+    }
+
+    @Override
+    public double getAttackSpeed() {
+        return attackSpeed;
+    }
+
+    @Override
+    public void setAttackSpeed(double amount) {
+        this.attackSpeed = amount;
+    }
+
+    @Override
+    public int getDamageDealt() {
+        return damageDealt;
+    }
+
+    @Override
+    public void setDamageDealt(int amount) {
+        this.damageDealt = amount;
     }
 
     @Override

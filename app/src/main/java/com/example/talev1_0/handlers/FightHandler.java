@@ -1,18 +1,12 @@
 package com.example.talev1_0.handlers;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.example.talev1_0.gameItems.abstractClasses.Item;
 import com.example.talev1_0.helpers.SnackbarHelper;
-import com.example.talev1_0.monsters.BaseMonster;
 import com.example.talev1_0.player.MonsterViewModel;
 import com.example.talev1_0.player.PlayerViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 public class FightHandler {
 
@@ -21,14 +15,18 @@ public class FightHandler {
     Item currentLoot;
     SnackbarHelper snackbarHelper;
 
-    public void attackMonster(View rootView, PlayerViewModel player, MonsterViewModel monster){
+    public boolean attackMonster(View rootView, PlayerViewModel player, MonsterViewModel monster){
+
+        boolean isMonsterAlive = true;
+        int damage = player.getPlayer().calculateDamageDealt(monster.getMonster().getValue());
+        player.setDamageDealt(damage);
+
+        if (monster.getMonsterHp() > 0 ) {
+            monster.decreaseMonsterHp(damage);
 
 
-        if (monster.getMonsterHp() >0 )
-        {
-        int damage = player.getPlayerDamage();
-        monster.decreaseMonsterHp(damage);
             if (monster.getMonsterHp() <= 0) {
+                isMonsterAlive = false;
                 snackbarHelper = new SnackbarHelper(rootView);
                 inventoryManager = new InventoryManager();
                 lootHandler = new LootHandler();
@@ -47,13 +45,23 @@ public class FightHandler {
                 }
             }
         }
-
-
+        return isMonsterAlive;
     }
 
-    public void attackPlayer(PlayerViewModel player, MonsterViewModel monster){
+    public boolean attackPlayer(PlayerViewModel player, MonsterViewModel monster){
         int damage = monster.getMonsterDamage();
-        player.reduceHp(damage);
+        monster.setDamageDealt(damage);
+        boolean isPlayerAlive = true;
+
+        if (player.getCurrentHp() > 0){
+            player.reduceHp(damage);
+
+            if (player.getCurrentHp() <=0 ){
+                player.setCurrentHp(1);
+                isPlayerAlive = false;
+            }
+        }
+        return isPlayerAlive;
     }
 
 

@@ -10,65 +10,35 @@
 
     <!-- Main container for all the sections -->
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_margin="6dp"
+            android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         <!-- Inventory Section (Vertical List of Buttons) -->
-        <LinearLayout
-                android:background="@drawable/border_rounded"
-
-                android:layout_marginTop="12dp"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/inventory_layout"
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/inventory_shop_recycler_view"
+                android:background="@color/dark_gray_background"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:layout_margin="3dp"
+                android:visibility="visible"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/shop_layout"
-                android:padding="8dp"
-                android:weightSum="1">
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Buttons for Inventory Items -->
-            <Button
-                    android:id="@+id/inventory_item_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Item 1"/>
-            <Button
-                    android:id="@+id/inventory_item_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Item 2"/>
-            <Button
-                    android:id="@+id/inventory_item_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Item 3"/>
-            <Button
-                    android:id="@+id/inventory_item_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Item 4"/>
-            <Button
-                    android:id="@+id/inventory_item_5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Item 5"/>
-            <!-- Add more items as needed -->
-        </LinearLayout>
 
+        <!-- Equipment Actions Section (Equip/Unequip and TextViews) -->
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:background="@drawable/border_rounded"
-                android:layout_marginTop="6dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/shop_layout"
-                app:layout_constraintTop_toBottomOf="@+id/inventory_layout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:padding="8dp">
+                android:padding="8dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toBottomOf="@+id/inventory_shop_recycler_view"
+                android:layout_margin="6dp">
 
             <TextView
                     android:text="Shop items"
@@ -121,11 +91,9 @@
                     app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <!-- Equipment Actions Section (Equip/Unequip and TextViews) -->
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:background="@drawable/border_rounded"
-                android:layout_marginTop="6dp"
+                android:layout_margin="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/equipment_actions_layout"

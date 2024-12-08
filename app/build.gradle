@@ -49,6 +49,10 @@ dependencies {
     implementation libs.room.common
     implementation libs.room.runtime
 
+    //networking dependencies
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+
+
     // Testing dependencies
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

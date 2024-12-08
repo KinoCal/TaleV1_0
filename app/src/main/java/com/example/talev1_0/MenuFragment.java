@@ -3,6 +3,7 @@ package com.example.talev1_0;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
+
+import java.lang.reflect.Field;
 
 public class MenuFragment extends Fragment {
 
@@ -52,9 +55,10 @@ public class MenuFragment extends Fragment {
 
         // Set up the PopupMenu
         menuTrigger.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(requireContext(), menuTrigger);
-            MenuInflater inflater = popupMenu.getMenuInflater();
-            inflater.inflate(R.menu.dropdown_menu, popupMenu.getMenu());
+            // Create PopupMenu
+            Context wrapper = new ContextThemeWrapper(requireContext(), R.style.CustomPopupMenu);
+            PopupMenu popupMenu = new PopupMenu(wrapper, menuTrigger);
+            popupMenu.inflate(R.menu.dropdown_menu);
 
             // Handle menu item clicks
             popupMenu.setOnMenuItemClickListener(item -> {
@@ -62,8 +66,25 @@ public class MenuFragment extends Fragment {
                 return true;
             });
 
+            // Access PopupWindow for positioning
+            try {
+                Field mPopupField = PopupMenu.class.getDeclaredField("mPopup");
+                mPopupField.setAccessible(true);
+                Object mPopup = mPopupField.get(popupMenu);
+                if (mPopup instanceof android.widget.ListPopupWindow) {
+                    ((android.widget.ListPopupWindow) mPopup).setHorizontalOffset(150); // Adjust X-axis offset
+                    ((android.widget.ListPopupWindow) mPopup).setVerticalOffset(100);   // Adjust Y-axis offset
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Show PopupMenu
             popupMenu.show();
         });
+
+
+
     }
 
     public void updateCurrentTitle(String newTitle) {

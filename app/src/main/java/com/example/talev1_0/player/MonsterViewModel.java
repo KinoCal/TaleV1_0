@@ -63,5 +63,19 @@ public class MonsterViewModel extends ViewModel {
         return currentMonster.getValue().getDamageValue();
     }
 
+    public int getDamageDealt(){
+        return currentMonster.getValue().getDamageDealt();
+    }
+
+    public void setDamageDealt(int amount){
+        BaseMonster monster = currentMonster.getValue();
+        currentMonster.getValue().setDamageDealt(amount);
+        currentMonster.setValue(monster);
+    }
+
+    public double getAttackSpeed(){
+        return currentMonster.getValue().getAttackSpeed();
+    }
+
     // Other update methods (damage, armor, etc.) can be added similarly
 }

@@ -8,15 +8,18 @@ import com.example.talev1_0.gameItems.conreteClasses.equipment.WeaponItem;
 
 import com.example.talev1_0.gameItems.interfaces.Item_Empty;
 import com.example.talev1_0.gameItems.abstractClasses.Item;
+import com.example.talev1_0.monsters.BaseMonster;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    Factories factory = new Factories();
+    private String userName;
+    private String password;
     private WeaponItem currentWeapon;
     private ArmorItem currentArmor;
     private String enemyName;
+    private int damageDealt;
     private int maxHp;
     private int currentHp;
     private int maxMp;
@@ -27,6 +30,7 @@ public class Player {
     private int defenceStat;
     private int level;
     private int gold;
+    private double attackSpeed;
     private int damage;
     private int armor;
     private boolean playerAlive;
@@ -65,8 +69,10 @@ public class Player {
         currentHp = maxHp;
         maxMp = 10;
         currentMp = maxMp;
+        attackSpeed = 4.0;
         strengthStat = 1;
         defenceStat = 1;
+        damageDealt = 0;
         damage = currentWeapon.getDamageValue();
         armor = currentArmor.getArmorValue();
         currentExp = 0;
@@ -209,6 +215,8 @@ public class Player {
         setLevel(getLevel() + 1);
         setCurrentExp(0);
         setMaxExp(getLevel() * 10);
+
+
 
     }
 
@@ -413,6 +421,49 @@ public class Player {
 
     public void setInventorySize(int inventorySize) {
         this.inventorySize = inventorySize;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAttackSpeed(int attackSpeed){
+        this.attackSpeed = attackSpeed;
+    }
+
+    public double getAttackSpeed(){
+        return attackSpeed;
+    }
+
+    public int getDamageDealt(){
+        return damageDealt;
+    }
+
+    public void setDamageDealt(int damage){
+        this.damageDealt = damage;
+    }
+
+    public int calculateDamageDealt(BaseMonster monster){
+        int monsterArmor = monster.getArmorValue();
+        int damageDealt = damage - monsterArmor;
+        if (damageDealt < 0){
+            damageDealt = 0;
+        }
+
+        return damageDealt;
     }
 
 }
