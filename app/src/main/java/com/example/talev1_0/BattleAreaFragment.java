@@ -96,7 +96,6 @@ public class BattleAreaFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         // Observe monster data
         monsterViewModel.getMonster().observe(getViewLifecycleOwner(), monster -> {
             if (monster != null) {
@@ -110,7 +109,6 @@ public class BattleAreaFragment extends Fragment {
                 playerDamageTextView.setText("Player  Damage: " + playerViewModel.getPlayer().getDamageDealt());
             }
         });
-
         // Initialize the current monster using playerViewModel
         String enemyName = playerViewModel.getEnemyName();
         if (enemyName != null) {
@@ -139,19 +137,21 @@ public class BattleAreaFragment extends Fragment {
                     // Execute player's attack
                     if (fightHandler.attackMonster(rootView, playerViewModel, monsterViewModel)){
                     // Restart progress animation
-                    startPlayerAttackSpeedProgress();
+                        stopPlayerAttackSpeedProgress();
+                        startPlayerAttackSpeedProgress();
+
 
                     // Schedule the next attack based on the player's attack speed
                     double attackSpeed = playerViewModel.getPlayer().getAttackSpeed(); // Seconds per attack
                     long delay = (long) (1000 * attackSpeed); // Convert to milliseconds
                     playerAttackHandler.postDelayed(this, delay);
 
-                    }else {
-                        stopMonsterAttackTimer();
-                        startMonsterAttackTimer();
-                        startPlayerAttackSpeedProgress();
+                    } else {
+                    // Stop any ongoing timers
+                    stopPlayerAttackTimer();
+                    // Restart the player attack timer
+                    startPlayerAttackTimer(rootView);
                     }
-
                 }
             };
         }
@@ -204,6 +204,7 @@ public class BattleAreaFragment extends Fragment {
                     // Execute the monster's attack
                     if (fightHandler.attackPlayer(playerViewModel, monsterViewModel)) {
                         // Restart progress animation
+                        stopMonsterAttackSpeedProgress();
                         startMonsterAttackSpeedProgress();
 
                         // Schedule the next attack based on the monster's attack speed

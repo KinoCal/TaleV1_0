@@ -24,7 +24,6 @@ public class FightHandler {
         if (monster.getMonsterHp() > 0 ) {
             monster.decreaseMonsterHp(damage);
 
-
             if (monster.getMonsterHp() <= 0) {
                 isMonsterAlive = false;
                 snackbarHelper = new SnackbarHelper(rootView);

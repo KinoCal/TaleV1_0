@@ -6,7 +6,8 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:background="@color/light_gray_foreground"
-        android:padding="8dp">
+        android:paddingLeft="4dp"
+        android:paddingTop="8dp">
 
     <!-- Trigger for Dropdown Menu -->
 

@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,12 +31,11 @@ public class ShopFragment extends Fragment {
     private Button[] shopButtons = new Button[4];
     private Button buyButton, sellButton;
     private TextView selectedItemName, selectedItemPrice, selectedItemDamageValue, SelectedItemArmorValue, selectedItemHealingValue;
-    private PlayerViewModel playerViewModel;
     private TavernShopKeeper tavernShopKeeper;
-    private InventoryManager inventoryManager;
     private RecyclerView inventoryRecyclerView;
     private int inventoryIndex, equipmentIndex;
-
+    private InventoryManager inventoryManager;
+    private PlayerViewModel playerViewModel;
 
     @Nullable
     @Override
@@ -51,15 +51,14 @@ public class ShopFragment extends Fragment {
         sellButton = view.findViewById(R.id.sell_item_button);
 
         inventoryRecyclerView = view.findViewById(R.id.inventory_shop_recycler_view);
-        inventoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 3); // 3 columns
+        inventoryRecyclerView.setLayoutManager(gridLayoutManager);
 
         selectedItemName = view.findViewById(R.id.selected_item_name);
         selectedItemPrice = view.findViewById(R.id.selected_item_price);
         selectedItemDamageValue = view.findViewById(R.id.selected_item_damage_value);
         SelectedItemArmorValue = view.findViewById(R.id.selected_item_armor_value);
         selectedItemHealingValue = view.findViewById(R.id.selected_item_heal_value);
-
-
 
         return view;
     }

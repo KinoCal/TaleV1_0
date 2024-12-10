@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
     private static final int MAIN_FRAGMENT_CONTAINER_ID = R.id.main_fragment_container;
     private static final int PLAYER_INFO_FRAGMENT_CONTAINER_ID = R.id.player_info_fragment_container;
     private static final int MENU_FRAGMENT_CONTAINER_ID = R.id.menu_fragment_container;
-    //private static final int PLAYER_CHAT_WINDOW_CONTAINER_ID = R.id.player_chat_fragment_container;
+    private static final int PLAYER_CHAT_WINDOW_CONTAINER_ID = R.id.player_chat_fragment_container;
 
 
     @Override
@@ -39,10 +39,10 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
         }
 
         // Load the ChatFragment
-        /*getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(PLAYER_CHAT_WINDOW_CONTAINER_ID, new ChatFragment())
                 .commit();
-*/
+
         // Load the MenuFragment
         getSupportFragmentManager().beginTransaction()
                 .replace(MENU_FRAGMENT_CONTAINER_ID, new MenuFragment())
@@ -76,8 +76,6 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
     @Override
     public void onMenuItemClicked(int itemId) {
         Fragment selectedFragment = null;
-        View rootView = findViewById(android.R.id.content); // Get the root view of the activity
-
 
         if (itemId == R.id.nav_inventory) {
 

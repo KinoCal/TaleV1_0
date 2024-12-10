@@ -69,7 +69,7 @@ public class Player {
         currentHp = maxHp;
         maxMp = 10;
         currentMp = maxMp;
-        attackSpeed = 4.0;
+        attackSpeed = 2.0;
         strengthStat = 1;
         defenceStat = 1;
         damageDealt = 0;

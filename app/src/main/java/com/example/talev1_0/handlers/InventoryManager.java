@@ -16,7 +16,7 @@ public class InventoryManager {
 		for (Item tempItem : player.getInventoryItems()){
 
 		if (!player.isInventoryFull() || tempItem.getName().equals(item.getName())) {
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < player.getInventoryItems().size(); i++) {
 				if (player.getInventoryItems().get(i).getName().equals(item.getName())) {
 					System.out.println("attempting to give player item..1 " + item.getName());
 					player.getInventoryItems().get(i).increaseQuantity(1);
@@ -42,10 +42,8 @@ public class InventoryManager {
 
 	public boolean BuyItem(PlayerViewModel player, Item item) {
 		boolean itemSold = false;
-
 		// Check if the player has enough gold to buy item
 		if (player.getPlayerGold() >= item.getPrice()){
-
 		// First pass: check for an existing item with the same name
 		for (int i = 0; i < player.getInventoryItems().size(); i++) {
 			if (player.getInventoryItems().get(i).getName().equals(item.getName())) {
@@ -57,7 +55,6 @@ public class InventoryManager {
 				return itemSold; // Exit the method after increasing the quantity
 			}
 		}
-
 		// Second pass: find the first empty slot to add the item
 		for (int i = 0; i < player.getInventoryItems().size(); i++) {
 			if (player.getInventoryItems().get(i).getItemIndex() == 9) {
@@ -70,7 +67,6 @@ public class InventoryManager {
 			}
 		}
 
-
 		} else {
 			itemSold = false;
 		}
@@ -82,9 +78,7 @@ public class InventoryManager {
 
 
 	public boolean SellItemToShop(PlayerViewModel player, Item item) {
-
 		boolean itemSold;
-
 		if(player.getPlayerItemIndex() >=0 || player.getPlayerItemIndex() < player.getInventoryItems().size()) {
 
 			if (player.getInventoryItems().get(player.getPlayerItemIndex()).getQuantity() < 2){
@@ -103,8 +97,6 @@ public class InventoryManager {
 				itemSold = true;
 
 			}
-
-
 		}
 		else {
 			itemSold = false;
@@ -181,10 +173,7 @@ public class InventoryManager {
 	}
 
 
-
-
 	public void UnEquipItem(PlayerViewModel player, Item item) {
-
 
 		for (int i = 0; i < player.getInventoryItems().size(); i++){
 			if (player.getInventoryItems().get(i).getName().equals(item.getName()) &&

@@ -42,7 +42,6 @@ public class InventoryFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 3); // 3 columns
         inventoryRecyclerView.setLayoutManager(gridLayoutManager);
 
-
         useButton = view.findViewById(R.id.use_button);
         equipButton = view.findViewById(R.id.equip_button);
         unequipButton = view.findViewById(R.id.unequip_button);
@@ -56,8 +55,6 @@ public class InventoryFragment extends Fragment {
         SelectedItemArmorValue = view.findViewById(R.id.selected_item_armor_value);
         selectedItemHealingValue = view.findViewById(R.id.selected_item_heal_value);
 
-
-
         return view;
     }
 
@@ -66,7 +63,6 @@ public class InventoryFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // Initialize ViewModel
-
         playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
         inventoryManager = new InventoryManager();
         equipmentIndex = 0;
@@ -80,8 +76,6 @@ public class InventoryFragment extends Fragment {
         useButton.setVisibility(View.INVISIBLE);
         equipButton.setVisibility(View.INVISIBLE);
         unequipButton.setVisibility(View.INVISIBLE);
-        // Get the ViewModel
-
 
         // Observe changes in the player's data
         playerViewModel.getPlayerLiveData().observe(getViewLifecycleOwner(), player -> {

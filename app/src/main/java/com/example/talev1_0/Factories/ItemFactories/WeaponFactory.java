@@ -15,7 +15,7 @@ public class WeaponFactory implements ItemFactory {
             case "Dagger" -> new WeaponItem(0, "Dagger", "weapon", "common", 2, 1, 1, RarityValues.COMMON);
             case "Short Sword" -> new WeaponItem(0, "Short Sword", "weapon", "common", 3, 2, 1, RarityValues.COMMON);
             //Rare
-            case "Sword" -> new WeaponItem(0, "Sword", "weapon", "rare", 5, 3, 1, RarityValues.RARE);
+            case "Sword" -> new WeaponItem(0, "Sword", "weapon", "rare", 5, 6, 1, RarityValues.RARE);
             case "Long Sword" -> new WeaponItem(0, "Long Sword", "weapon", "rare", 7, 4, 1, RarityValues.RARE);
             //Epic
             case "Mace" -> new WeaponItem(0, "mace", "weapon", "epic", 10, 6, 1, RarityValues.EPIC);

@@ -31,7 +31,6 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
         return new InventoryViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull InventoryViewHolder holder, int position) {
         Item inventoryItem = inventoryItems.get(position);

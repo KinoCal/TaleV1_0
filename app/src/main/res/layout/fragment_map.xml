@@ -5,7 +5,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/dark_gray_background">
-
                 <LinearLayout
                         android:background="@drawable/border"
                         android:layout_width="match_parent"
@@ -13,34 +12,28 @@
                         android:orientation="vertical"
                         android:padding="8dp"
                         android:layout_marginTop="6dp">
-
                         <!-- Goblin Cave -->
                         <Button
                                 android:id="@+id/goblin_cave_button"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Goblin Cave" />
-
                         <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/goblin_cave_recycler_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:visibility="gone" />
-
                         <!-- Dragon Den -->
                         <Button
                                 android:id="@+id/dragon_den_button"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Dragon Den" />
-
                         <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/dragon_den_recycler_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:visibility="gone" />
-
                         <!-- Add more areas here -->
-
                 </LinearLayout>
         </ScrollView>

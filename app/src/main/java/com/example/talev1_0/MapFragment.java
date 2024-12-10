@@ -69,13 +69,13 @@ public class MapFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Setup Goblin Cave
-        List<BaseMonster> goblinCaveMonsters = List.of(new GoblinMonster(), new GoblinMonster());
+        List<BaseMonster> goblinCaveMonsters = List.of(new GoblinMonster());
         MonsterAdapter goblinCaveAdapter = new MonsterAdapter(goblinCaveMonsters, this::showMonsterDropTable, this::startFight);
         goblinCaveRecyclerView.setAdapter(goblinCaveAdapter);
         goblinCaveButton.setOnClickListener(v -> toggleRecyclerViewVisibility(goblinCaveRecyclerView));
 
         // Setup Dragon Den
-        List<BaseMonster> dragonDenMonsters = List.of(new DragonMonster(), new DragonMonster());
+        List<BaseMonster> dragonDenMonsters = List.of(new DragonMonster());
         MonsterAdapter dragonDenAdapter = new MonsterAdapter(dragonDenMonsters, this::showMonsterDropTable, this::startFight);
         dragonDenRecyclerView.setAdapter(dragonDenAdapter);
         dragonDenButton.setOnClickListener(v -> toggleRecyclerViewVisibility(dragonDenRecyclerView));

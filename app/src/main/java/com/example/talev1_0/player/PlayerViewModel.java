@@ -33,7 +33,27 @@ public class PlayerViewModel extends AndroidViewModel {
 
         initializePlayer(1);
     }
+    // Initialize player from the database or create a new one
+    private void initializePlayer(int playerId) {
+        new Thread(() -> {
+            PlayerEntity playerEntity = DatabaseClient.getInstance(application).getAppDatabase().playerDao().getPlayerById(playerId);
 
+            if (playerEntity != null) {
+                // Existing player found, map it to the Player object
+                player = mapEntityToPlayer(playerEntity);
+            } else {
+                // No player found, create a new one
+                player = new Player(); // Initialize new player data
+                initializeEquipmentInDatabase();
+                savePlayerToDatabase(player, playerId); // Save to database with the given ID
+                initializeInventoryInDatabase(playerId);
+
+
+            }
+
+            playerLiveData.postValue(player); // Update LiveData
+        }).start();
+    }
     // Method to initialize player's inventory in the database
     private void initializeInventoryInDatabase(int playerId) {
         new Thread(() -> {
@@ -64,7 +84,6 @@ public class PlayerViewModel extends AndroidViewModel {
             equipmentItems.add(new EquipmentEntity("empty", "weapon"));
             equipmentItems.add(new EquipmentEntity("empty", "armor"));
 
-
             // Insert the items into the inventory table
             DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().insertAll(equipmentItems);
 
@@ -72,8 +91,7 @@ public class PlayerViewModel extends AndroidViewModel {
         }).start();
     }
 
-    // Helper to map InventoryEntity to players inventory
-    // Helper to map PlayerEntity to Player
+    // Helper to map InventoryEntity to players inventory, playerEntity to player and equipmentEntity to player
     private Player mapEntityToPlayer(PlayerEntity entity) {
         Player player = new Player();
         player.setLevel(entity.getLevel());
@@ -99,7 +117,6 @@ public class PlayerViewModel extends AndroidViewModel {
             player.getInventoryItem(i).setQuantity(inventoryEntities.get(i).getQuantity());
         }
 
-
         // Retrieve equipment items
         EquipmentEntity equipmentEntity1 = DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().getEquipmentById(1);
         EquipmentEntity equipmentEntity2 = DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().getEquipmentById(2);
@@ -112,27 +129,6 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
 
-    // Initialize player from the database or create a new one
-    private void initializePlayer(int playerId) {
-        new Thread(() -> {
-            PlayerEntity playerEntity = DatabaseClient.getInstance(application).getAppDatabase().playerDao().getPlayerById(playerId);
-
-            if (playerEntity != null) {
-                // Existing player found, map it to the Player object
-                player = mapEntityToPlayer(playerEntity);
-            } else {
-                // No player found, create a new one
-                player = new Player(); // Initialize new player data
-                initializeEquipmentInDatabase();
-                savePlayerToDatabase(player, playerId); // Save to database with the given ID
-                initializeInventoryInDatabase(playerId);
-
-
-            }
-
-            playerLiveData.postValue(player); // Update LiveData
-        }).start();
-    }
 
     // Save player to the database
     public void savePlayerToDatabase(Player player, int playerId) {
@@ -150,18 +146,11 @@ public class PlayerViewModel extends AndroidViewModel {
                     player.getMaxExp(),
                     player.getGold()
             );
-
-
             DatabaseClient.getInstance(application).getAppDatabase().playerDao().insertPlayer(playerEntity);
-
             // Save the player's inventory data
             for (int i = 0; i < player.inventoryItems.size(); i++) {
                 // Retrieve the corresponding InventoryEntity from the database
-                InventoryEntity inventoryEntity = DatabaseClient.getInstance(application)
-                        .getAppDatabase()
-                        .inventoryDao()
-                        .getInventoryById(i + 1); // Assuming IDs start at 1 and match indices
-
+                InventoryEntity inventoryEntity = DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(i + 1); // Assuming IDs start at 1 and match indices
                 // Get the item from the player's inventory
                 Item item = player.getInventoryItem(i);
 

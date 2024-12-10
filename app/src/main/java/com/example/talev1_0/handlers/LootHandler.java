@@ -53,6 +53,8 @@ public class LootHandler {
             if (item.getRarityName().equals(itemRarity)) {
                 tempList.add(item); // Add item to the tempList
 
+            }else {
+                System.out.println("no loot");
             }
         }
 

@@ -26,7 +26,6 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class ChatFragment extends Fragment {
-
     private WebSocket webSocket;
     private EditText messageEditText;
     private ChatAdapter chatAdapter;
@@ -36,16 +35,13 @@ public class ChatFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
-
         // Initialize message list and adapter
         messageList = new ArrayList<>();
         chatAdapter = new ChatAdapter(messageList);
-
         // Set up RecyclerView
         RecyclerView chatRecyclerView = view.findViewById(R.id.chatRecyclerView);
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         chatRecyclerView.setAdapter(chatAdapter);
-
         // Initialize UI elements
         messageEditText = view.findViewById(R.id.messageEditText);
 
@@ -88,7 +84,6 @@ public class ChatFragment extends Fragment {
                     chatRecyclerView.scrollToPosition(messageList.size() - 1);
                 });
             }
-
 
             @Override
             public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @Nullable Response response) {
