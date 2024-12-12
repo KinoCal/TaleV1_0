@@ -64,11 +64,12 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
     @Override
     protected void onPause() {
         super.onPause();
+        savePlayerData();
+    }
 
-        // Get the PlayerViewModel instance
+
+    private void savePlayerData() {
         PlayerViewModel playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
-
-        // Save the player's data to the database
         playerViewModel.savePlayer();
     }
 

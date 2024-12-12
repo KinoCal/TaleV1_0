@@ -15,8 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.talev1_0.Factories.ItemFactories.MonsterFactory;
+import com.example.talev1_0.adapters.ConsumableAdapter;
+import com.example.talev1_0.adapters.InventoryAdapter;
 import com.example.talev1_0.handlers.FightHandler;
 import com.example.talev1_0.helpers.SnackbarHelper;
 import com.example.talev1_0.monsters.BaseMonster;
@@ -24,6 +28,7 @@ import com.example.talev1_0.player.MonsterViewModel;
 import com.example.talev1_0.player.PlayerViewModel;
 
 public class BattleAreaFragment extends Fragment {
+    private RecyclerView consumableRecyclerView;
     private FragmentChangeListener fragmentChangeListener;
     private MonsterViewModel monsterViewModel;
     private TextView monsterNameTextView;
@@ -63,6 +68,9 @@ public class BattleAreaFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_battle_area, container, false);
+
+        consumableRecyclerView = view.findViewById(R.id.consumable_recycler_view);
+        consumableRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         playerDamageTextView = view.findViewById(R.id.player_damage_textview);
         playerAttackSpeedProgressBar = view.findViewById(R.id.player_attack_speed_progressbar);
@@ -109,6 +117,16 @@ public class BattleAreaFragment extends Fragment {
                 playerDamageTextView.setText("Player  Damage: " + playerViewModel.getPlayer().getDamageDealt());
             }
         });
+
+        // Observe changes in the player's data
+        playerViewModel.getPlayerLiveData().observe(getViewLifecycleOwner(), player -> {
+
+            ConsumableAdapter consumableAdapter = new ConsumableAdapter(player.getConsumableItemList(), playerViewModel);
+            consumableRecyclerView.setAdapter(consumableAdapter);
+
+        });
+
+
         // Initialize the current monster using playerViewModel
         String enemyName = playerViewModel.getEnemyName();
         if (enemyName != null) {
@@ -135,22 +153,22 @@ public class BattleAreaFragment extends Fragment {
                 @Override
                 public void run() {
                     // Execute player's attack
-                    if (fightHandler.attackMonster(rootView, playerViewModel, monsterViewModel)){
-                    // Restart progress animation
+                    if (fightHandler.attackMonster(rootView, playerViewModel, monsterViewModel)) {
+                        // Restart progress animation
                         stopPlayerAttackSpeedProgress();
                         startPlayerAttackSpeedProgress();
 
 
-                    // Schedule the next attack based on the player's attack speed
-                    double attackSpeed = playerViewModel.getPlayer().getAttackSpeed(); // Seconds per attack
-                    long delay = (long) (1000 * attackSpeed); // Convert to milliseconds
-                    playerAttackHandler.postDelayed(this, delay);
+                        // Schedule the next attack based on the player's attack speed
+                        double attackSpeed = playerViewModel.getPlayer().getAttackSpeed(); // Seconds per attack
+                        long delay = (long) (1000 * attackSpeed); // Convert to milliseconds
+                        playerAttackHandler.postDelayed(this, delay);
 
                     } else {
-                    // Stop any ongoing timers
-                    stopPlayerAttackTimer();
-                    // Restart the player attack timer
-                    startPlayerAttackTimer(rootView);
+                        // Stop any ongoing timers
+                        stopPlayerAttackTimer();
+                        // Restart the player attack timer
+                        startPlayerAttackTimer(rootView);
                     }
                 }
             };

@@ -42,12 +42,12 @@ public class Player {
     private int shopItemIndex;
     private int inventorySize;
     public Item empty = new Item_Empty();
-    public Item emptyWeapon = new WeaponItem(0,"empty", "weapon", "empty", 0, 0, 1, 0);
-    public Item emptyArmour = new ArmorItem(1,"empty", "armor", "empty", 0, 0, 1, 0);
+    public Item emptyWeapon = new WeaponItem(0, "empty", "weapon", "empty", 0, 0, 1, 0);
+    public Item emptyArmour = new ArmorItem(1, "empty", "armor", "empty", 0, 0, 1, 0);
 
 
     public Item[] equippedItems = new Item[2];
-    public List <Item> inventoryItems = new ArrayList<>();
+    public List<Item> inventoryItems = new ArrayList<>();
 
 
     public Player() {
@@ -56,11 +56,10 @@ public class Player {
         equippedItems[1] = emptyArmour;
 
 
-        inventoryItems.add(empty);
-        inventoryItems.add(empty);
-        inventoryItems.add(empty);
-        inventoryItems.add(empty);
-        inventoryItems.add(empty);
+        for (int i = 0; i < 30; i++) {
+
+            inventoryItems.add(empty);
+        }
 
         currentWeapon = (WeaponItem) equippedItems[0];
         currentArmor = (ArmorItem) equippedItems[1];
@@ -74,12 +73,12 @@ public class Player {
         strengthStat = 1;
         defenceStat = 1;
         damageDealt = 0;
-        damage = currentWeapon.getDamageValue();
+        damage = currentWeapon.getDamageValue() + getStrengthStat();
         armor = currentArmor.getArmorValue();
         currentExp = 0;
         maxExp = level * 10;
         gold = 100;
-        inventorySize = 5;
+        inventorySize = 30;
         playerAlive = true;
 
 
@@ -87,31 +86,30 @@ public class Player {
         setPlayerInventoryIndex(-1);
 
 
-
     }
 
 
-    public Item getEquippedItem(int index){
+    public Item getEquippedItem(int index) {
         return equippedItems[index];
     }
 
-    public void setEquippedItems(Item item, int index){
+    public void setEquippedItems(Item item, int index) {
         equippedItems[index] = item;
     }
 
-    public Item getInventoryItem(int index){
+    public Item getInventoryItem(int index) {
 
         return inventoryItems.get(index);
     }
 
-    public void setInventoryItem(Item item, int index){
+    public void setInventoryItem(Item item, int index) {
         inventoryItems.set(index, item);
     }
 
-    public boolean isInventoryFull(){
+    public boolean isInventoryFull() {
         Boolean check = false;
-        for (Item item : inventoryItems){
-             if (!item.getName().equals("empty")) {
+        for (Item item : inventoryItems) {
+            if (!item.getName().equals("empty")) {
                 check = true;
             } else {
                 check = false;
@@ -119,9 +117,10 @@ public class Player {
         }
         return check;
     }
-    public boolean IsPlayerHpZero(){
+
+    public boolean IsPlayerHpZero() {
         boolean isZero = false;
-        if (getCurrentHp() == 0){
+        if (getCurrentHp() == 0) {
             System.out.println("player is dead");
             setCurrentHp(0);
             isZero = true;
@@ -136,6 +135,7 @@ public class Player {
     public void setMaxHp(int maxHp) {
         this.maxHp = maxHp;
     }
+
 
     public int getCurrentHp() {
         return currentHp;
@@ -193,9 +193,13 @@ public class Player {
         this.gold = gold;
     }
 
-    public void decreaseGold(int gold){this.gold -= gold;}
+    public void decreaseGold(int gold) {
+        this.gold -= gold;
+    }
 
-    public void increaseGold(int gold){this.gold += gold;}
+    public void increaseGold(int gold) {
+        this.gold += gold;
+    }
 
     public boolean isPlayerAlive() {
         return playerAlive;
@@ -213,10 +217,11 @@ public class Player {
     }
 
     private void levelUp() {
+        setStrengthStat(getStrengthStat() + 1);
+        setMaxHp(getMaxHp() + 5);
         setLevel(getLevel() + 1);
         setCurrentExp(0);
         setMaxExp(getLevel() * 10);
-
 
 
     }
@@ -241,19 +246,14 @@ public class Player {
     }
 
 
-
-
     public int getPlayerItemIndex() {
         return playerItemIndex;
     }
 
 
-
     public void setPlayerItemIndex(int playerItemIndex) {
         this.playerItemIndex = playerItemIndex;
     }
-
-
 
 
     public boolean setInventoryFull(boolean inventoryFull) {
@@ -266,11 +266,9 @@ public class Player {
     }
 
 
-
     public int getPlayerEquipmentIndex() {
         return playerEquipmentIndex;
     }
-
 
 
     public void setPlayerEquipmentIndex(int playerEquipmentIndex) {
@@ -278,11 +276,9 @@ public class Player {
     }
 
 
-
     public WeaponItem getCurrentWeapon() {
         return currentWeapon;
     }
-
 
 
     public void setCurrentWeapon(WeaponItem currentWeapon) {
@@ -290,11 +286,9 @@ public class Player {
     }
 
 
-
     public ArmorItem getCurrentArmor() {
         return currentArmor;
     }
-
 
 
     public void setCurrentArmor(ArmorItem currentArmor) {
@@ -302,17 +296,14 @@ public class Player {
     }
 
 
-
     public int getDamage() {
         return damage;
     }
 
 
-
     public void setDamage(int damage) {
-        this.damage += damage;
+        this.damage = damage;
     }
-
 
 
     public int getArmor() {
@@ -320,13 +311,9 @@ public class Player {
     }
 
 
-
     public void setArmor(int armor) {
-        this.armor += armor;
+        this.armor = armor;
     }
-
-
-
 
 
     public int getPlayerInventoryIndex() {
@@ -334,11 +321,9 @@ public class Player {
     }
 
 
-
     public void setPlayerInventoryIndex(int playerInventoryIndex) {
         this.playerInventoryIndex = playerInventoryIndex;
     }
-
 
 
     public int getStrengthStat() {
@@ -346,17 +331,14 @@ public class Player {
     }
 
 
-
     public void setStrengthStat(int strengthStat) {
         this.strengthStat = strengthStat;
     }
 
 
-
     public int getDefenceStat() {
         return defenceStat;
     }
-
 
 
     public void setDefenceStat(int defenceStat) {
@@ -398,11 +380,11 @@ public class Player {
     }
 
 
-    public boolean isInventoryIndexEmpty(int index){
+    public boolean isInventoryIndexEmpty(int index) {
         Boolean isEmpty;
-        if (inventoryItems.get(index).getName().isEmpty()){
+        if (inventoryItems.get(index).getName().isEmpty()) {
             isEmpty = true;
-        }else {
+        } else {
             isEmpty = false;
         }
         return isEmpty;
@@ -441,31 +423,41 @@ public class Player {
         this.password = password;
     }
 
-    public void setAttackSpeed(int attackSpeed){
+    public void setAttackSpeed(int attackSpeed) {
         this.attackSpeed = attackSpeed;
     }
 
-    public double getAttackSpeed(){
+    public double getAttackSpeed() {
         return attackSpeed;
     }
 
-    public int getDamageDealt(){
+    public int getDamageDealt() {
         return damageDealt;
     }
 
-    public void setDamageDealt(int damage){
+    public void setDamageDealt(int damage) {
         this.damageDealt = damage;
     }
 
-    public int calculateDamageDealt(BaseMonster monster){
+    public int calculateDamageDealt(BaseMonster monster) {
         Random random = new Random();
         int monsterArmor = monster.getArmorValue();
         int damageDealt = random.nextInt(damage);
-        if (damageDealt < 0){
+        if (damageDealt < 0) {
             damageDealt = 0;
         }
 
         return damageDealt;
+    }
+
+    public List<Item> getConsumableItemList() {
+        List<Item> consumableList = new ArrayList<>();
+        for (Item item : inventoryItems) {
+            if (item.getType().equals("consumable")) {
+                consumableList.add(item);
+            }
+        }
+        return consumableList;
     }
 
 }

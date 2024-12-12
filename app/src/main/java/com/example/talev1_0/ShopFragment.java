@@ -84,7 +84,7 @@ public class ShopFragment extends Fragment {
         sellButton.setVisibility(View.INVISIBLE);
 
         // Set up ui for shopkeeper
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             shopButtons[i].setText(tavernShopKeeper.getShopItems(i).getName());
         }
         // Get the ViewModel
@@ -97,48 +97,47 @@ public class ShopFragment extends Fragment {
         });
 
 
-
         // SHOPKEEPER BUTTONS
-        shopButtons[0].setOnClickListener(v ->{
+        shopButtons[0].setOnClickListener(v -> {
             setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0), 0);
             SetupUiForSelectedShopItem(0);
 
         });
 
-        shopButtons[1].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0),1);
+        shopButtons[1].setOnClickListener(v -> {
+            setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0), 1);
             SetupUiForSelectedShopItem(1);
 
         });
 
-        shopButtons[2].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0),2);
+        shopButtons[2].setOnClickListener(v -> {
+            setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0), 2);
             SetupUiForSelectedShopItem(2);
 
         });
 
-        shopButtons[3].setOnClickListener(v ->{
-            setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0),3);
+        shopButtons[3].setOnClickListener(v -> {
+            setPlayerIndexesForSelectedItem(tavernShopKeeper.getShopItems(0), 3);
             SetupUiForSelectedShopItem(3);
 
         });
 
         // BUY / SELL ITEM BUTTONS
-        buyButton.setOnClickListener(v ->{
-            if (inventoryManager.BuyItem(playerViewModel, tavernShopKeeper.getShopItems(playerViewModel.getPlayerShopItemIndex()))){
+        buyButton.setOnClickListener(v -> {
+            if (inventoryManager.BuyItem(playerViewModel, tavernShopKeeper.getShopItems(playerViewModel.getPlayerShopItemIndex()))) {
                 System.out.println("item bought: " + tavernShopKeeper.getShopItems(playerViewModel.getPlayerShopItemIndex()).getName());
-            }else {
+            } else {
                 System.out.println("error buying item");
                 Toast.makeText(getActivity().getApplicationContext(), "sorry not enough gold", Toast.LENGTH_SHORT).show();
             }
-            buyButton.setVisibility(View.INVISIBLE);
+
         });
 
         sellButton.setOnClickListener(v -> {
 
-            if (inventoryManager.SellItemToShop(playerViewModel, playerViewModel.getInventoryItemAtIndex(playerViewModel.getPlayerItemIndex()))){
+            if (inventoryManager.SellItemToShop(playerViewModel, playerViewModel.getInventoryItemAtIndex(playerViewModel.getPlayerItemIndex()))) {
                 System.out.println("Sold Item: " + playerViewModel.getInventoryItemAtIndex(playerViewModel.getPlayerItemIndex()).getName());
-            }else {
+            } else {
                 System.out.println("error selling item");
 
 
@@ -149,7 +148,7 @@ public class ShopFragment extends Fragment {
 
     }
 
-    public void SetupUiForSelectedShopItem(int index){
+    public void SetupUiForSelectedShopItem(int index) {
 
         buyButton.setVisibility(View.VISIBLE);
         sellButton.setVisibility(View.INVISIBLE);
@@ -179,7 +178,7 @@ public class ShopFragment extends Fragment {
         }
     }
 
-    public void setPlayerIndexesForSelectedItem(Item item, int index){
+    public void setPlayerIndexesForSelectedItem(Item item, int index) {
         inventoryIndex = index;
         playerViewModel.setPlayerItemIndex(index);
         playerViewModel.setPlayerEquipmentIndex(playerViewModel.getInventoryItemAtIndex(index).getItemIndex());
@@ -188,7 +187,7 @@ public class ShopFragment extends Fragment {
     }
 
     @SuppressLint("SetTextI18n")
-    private void SetupUiForSelectedInventoryItem(int index){
+    private void SetupUiForSelectedInventoryItem(int index) {
 
         buyButton.setVisibility(View.INVISIBLE);
         sellButton.setVisibility(View.VISIBLE);

@@ -5,9 +5,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_margin="6dp"
-        android:paddingTop="?attr/actionBarSize"
-        >
+        android:paddingTop="?attr/actionBarSize">
 
+    <!-- Existing content -->
     <androidx.constraintlayout.widget.ConstraintLayout
             android:background="@drawable/border_rounded"
             android:padding="6dp"
@@ -62,17 +62,14 @@
                 android:layout_marginStart="12dp"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintEnd_toStartOf="@+id/leave_button" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp">
 
         <LinearLayout
-
                 android:padding="6dp"
                 android:background="@drawable/border_rounded"
                 android:orientation="vertical"
@@ -100,7 +97,6 @@
                     android:scaleY="2"
                     android:id="@+id/player_attack_speed_progressbar"
                     android:progressTint="#76FF03" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -110,7 +106,6 @@
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:id="@+id/linearLayout3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/linearLayout4"
@@ -135,4 +130,16 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Spacer to push RecyclerView to the bottom -->
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    <!-- RecyclerView attached to the bottom -->
+    <androidx.recyclerview.widget.RecyclerView
+            android:background="@color/light_gray_foreground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/consumable_recycler_view" />
 </LinearLayout>

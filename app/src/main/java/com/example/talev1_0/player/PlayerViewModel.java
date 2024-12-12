@@ -33,6 +33,7 @@ public class PlayerViewModel extends AndroidViewModel {
 
         initializePlayer(1);
     }
+
     // Initialize player from the database or create a new one
     private void initializePlayer(int playerId) {
         new Thread(() -> {
@@ -54,6 +55,7 @@ public class PlayerViewModel extends AndroidViewModel {
             playerLiveData.postValue(player); // Update LiveData
         }).start();
     }
+
     // Method to initialize player's inventory in the database
     private void initializeInventoryInDatabase() {
         new Thread(() -> {
@@ -62,8 +64,8 @@ public class PlayerViewModel extends AndroidViewModel {
 
             // Add default items to the list
 
-            for (int i = 0; i < player.getInventorySize(); i++){
-            inventoryItems.add(new InventoryEntity("empty", "empty", 1));
+            for (int i = 0; i < player.getInventorySize(); i++) {
+                inventoryItems.add(new InventoryEntity("empty", "empty", 1));
 
             }
 
@@ -107,12 +109,12 @@ public class PlayerViewModel extends AndroidViewModel {
 
         // Retrieve inventory items
         List<InventoryEntity> inventoryEntities = new ArrayList<>();
-        for (int i = 1; i < player.getInventorySize()+1; i++){
+        for (int i = 1; i < player.getInventorySize() + 1; i++) {
             inventoryEntities.add(DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(i));
         }
 
         // Correctly pass the correct inventory name for each item
-        for (int i = 0; i < player.getInventorySize(); i++){
+        for (int i = 0; i < player.getInventorySize(); i++) {
             player.setInventoryItem(factories.createItem(inventoryEntities.get(i).getType(), inventoryEntities.get(i).getName()), i);
             player.getInventoryItem(i).setQuantity(inventoryEntities.get(i).getQuantity());
         }
@@ -127,7 +129,6 @@ public class PlayerViewModel extends AndroidViewModel {
 
         return player;
     }
-
 
 
     // Save player to the database
@@ -154,10 +155,10 @@ public class PlayerViewModel extends AndroidViewModel {
                 // Get the item from the player's inventory
                 Item item = player.getInventoryItem(i);
 
-                    // Update the InventoryEntity with the item's data
-                    inventoryEntity.setName(item.getName());
-                    inventoryEntity.setType(item.getType());
-                    inventoryEntity.setQuantity(item.getQuantity());
+                // Update the InventoryEntity with the item's data
+                inventoryEntity.setName(item.getName());
+                inventoryEntity.setType(item.getType());
+                inventoryEntity.setQuantity(item.getQuantity());
 
                 // Update the database with each inventory item
                 DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().insertInventory(inventoryEntity);
@@ -174,6 +175,7 @@ public class PlayerViewModel extends AndroidViewModel {
                 // Get the item from the player's equipment inventory
                 Item item = player.getEquippedItem(j);
 
+                System.out.println(item.getName() + "database test");
                 // Update the InventoryEntity with the item's data
                 equipmentEntity.setName(item.getName());
                 equipmentEntity.setType(item.getType());
@@ -183,14 +185,13 @@ public class PlayerViewModel extends AndroidViewModel {
             }
 
 
-
         }).start();
     }
 
 
     // Save player data to the database
     public void savePlayer() {
-        savePlayerToDatabase(player,1);
+        savePlayerToDatabase(player, 1);
     }
 
 
@@ -198,7 +199,7 @@ public class PlayerViewModel extends AndroidViewModel {
         return playerLiveData;
     }
 
-    public int getCurrentHp(){
+    public int getCurrentHp() {
         return player.getCurrentHp();
     }
 
@@ -216,161 +217,161 @@ public class PlayerViewModel extends AndroidViewModel {
         }
     }
 
-    public void healPlayer(int amount){
+    public void healPlayer(int amount) {
         player.healPlayer(amount);
         playerLiveData.setValue(player);
     }
 
-    public int getCurrentExp(){
+    public int getCurrentExp() {
         return player.getCurrentExp();
     }
 
-    public int getMaxExp(){
+    public int getMaxExp() {
         return player.getMaxExp();
     }
 
-    public void setCurrentExp(int amount){
+    public void setCurrentExp(int amount) {
         player.setCurrentExp(amount);
         playerLiveData.setValue(player);
     }
 
-    public void setMaxExp(int amount){
+    public void setMaxExp(int amount) {
         player.setMaxExp(amount);
         playerLiveData.setValue(player);
     }
 
-    public void gainXp(int amount){
+    public void gainXp(int amount) {
         player.gainXp(amount);
         playerLiveData.setValue(player);
     }
 
-    public int getCurrentLevel(){
+    public int getCurrentLevel() {
         return player.getLevel();
     }
 
-    public void setPlayerGold(int value){
+    public void setPlayerGold(int value) {
         player.setGold(value);
         playerLiveData.setValue(player);
     }
 
-    public void increasePlayerGold(int amount){
+    public void increasePlayerGold(int amount) {
         player.increaseGold(amount);
         playerLiveData.setValue(player);
     }
 
-    public int getPlayerGold(){
+    public int getPlayerGold() {
         return player.getGold();
     }
 
-    public Item getInventoryItemAtIndex(int index){
+    public Item getInventoryItemAtIndex(int index) {
 
         return playerLiveData.getValue().getInventoryItem(index);
     }
 
-    public Boolean isInventoryFull(){
+    public Boolean isInventoryFull() {
         return player.isInventoryFull();
     }
 
-    public Item getEquippedItemAtIndex(int index){
+    public Item getEquippedItemAtIndex(int index) {
 
         return player.equippedItems[index];
     }
 
-    public Item[] getEquippedItems(){
+    public Item[] getEquippedItems() {
         return player.equippedItems;
     }
 
-    public List<Item> getInventoryItems(){
+    public List<Item> getInventoryItems() {
         return playerLiveData.getValue().inventoryItems;
     }
 
-    public Item getEmptyItem(){
+    public Item getEmptyItem() {
         return player.empty;
     }
 
-    public Item getEmptyWeaponItem(){
+    public Item getEmptyWeaponItem() {
         return player.emptyWeapon;
     }
 
-    public Item getEmptyArmorItem(){
+    public Item getEmptyArmorItem() {
         return player.emptyArmour;
     }
 
-    public WeaponItem getCurrentWeapon(){
+    public WeaponItem getCurrentWeapon() {
         return player.getCurrentWeapon();
     }
 
-    public ArmorItem getCurrentArmor(){
+    public ArmorItem getCurrentArmor() {
         return player.getCurrentArmor();
     }
 
-    public void setCurrentWeapon(WeaponItem currentWeapon){
+    public void setCurrentWeapon(WeaponItem currentWeapon) {
         player.setCurrentWeapon(currentWeapon);
         playerLiveData.setValue(player);
     }
 
-    public void setCurrentArmor(ArmorItem currentArmor){
+    public void setCurrentArmor(ArmorItem currentArmor) {
         player.setCurrentArmor(currentArmor);
         playerLiveData.setValue(player);
     }
 
-    public int getPlayerArmorValue(){
+    public int getPlayerArmorValue() {
         return player.getArmor();
     }
 
-    public void setPlayerDamage(int value){
+    public void setPlayerDamage(int value) {
         player.setDamage(value);
         playerLiveData.setValue(player);
     }
 
-    public int getPlayerDamage(){
+    public int getPlayerDamage() {
         return player.getDamage();
     }
 
-    public void setPlayerArmorValue(int value){
+    public void setPlayerArmorValue(int value) {
         player.setArmor(value);
         playerLiveData.setValue(player);
     }
 
-    public void setPlayerItemIndex(int value){
+    public void setPlayerItemIndex(int value) {
         player.setPlayerItemIndex(value);
         playerLiveData.setValue(player);
     }
 
-    public int getPlayerItemIndex(){
+    public int getPlayerItemIndex() {
         return player.getPlayerItemIndex();
     }
 
-    public void setPlayerEquipmentIndex(int value){
+    public void setPlayerEquipmentIndex(int value) {
         player.setPlayerEquipmentIndex(value);
         playerLiveData.setValue(player);
     }
 
-    public int getPlayerEquipmentIndex(){
+    public int getPlayerEquipmentIndex() {
         return player.getPlayerEquipmentIndex();
     }
 
-    public void setPlayerShopItemIndex(int value){
+    public void setPlayerShopItemIndex(int value) {
         player.setShopItemIndex(value);
         playerLiveData.setValue(player);
     }
 
-    public int getPlayerShopItemIndex(){
+    public int getPlayerShopItemIndex() {
         return player.getShopItemIndex();
     }
 
-    public void decreaseGold(int gold){
+    public void decreaseGold(int gold) {
         player.decreaseGold(gold);
         playerLiveData.setValue(player);
     }
 
 
-    public void increaseGold(int gold){
+    public void increaseGold(int gold) {
         player.increaseGold(gold);
         playerLiveData.setValue(player);
     }
 
-    public void setEnemyName(String name){
+    public void setEnemyName(String name) {
         player.setEnemyName(name);
         playerLiveData.setValue(player);
     }
@@ -380,32 +381,32 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
 
-    public String getEnemyName(){
+    public String getEnemyName() {
         return player.getEnemyName();
     }
 
-    public String getUserName(){
+    public String getUserName() {
         return player.getUserName();
     }
 
-    public void setUserName(String username){
+    public void setUserName(String username) {
         player.setUserName(username);
         playerLiveData.setValue(player);
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return player.getPassword();
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         player.setPassword(password);
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 
-    public void setDamageDealt(int amount){
+    public void setDamageDealt(int amount) {
         player.setDamageDealt(amount);
         playerLiveData.setValue(player);
     }
