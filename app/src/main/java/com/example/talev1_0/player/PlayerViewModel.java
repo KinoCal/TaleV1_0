@@ -45,8 +45,8 @@ public class PlayerViewModel extends AndroidViewModel {
                 // No player found, create a new one
                 player = new Player(); // Initialize new player data
                 initializeEquipmentInDatabase();
+                initializeInventoryInDatabase();
                 savePlayerToDatabase(player, playerId); // Save to database with the given ID
-                initializeInventoryInDatabase(playerId);
 
 
             }
@@ -55,7 +55,7 @@ public class PlayerViewModel extends AndroidViewModel {
         }).start();
     }
     // Method to initialize player's inventory in the database
-    private void initializeInventoryInDatabase(int playerId) {
+    private void initializeInventoryInDatabase() {
         new Thread(() -> {
             // Create a list of default inventory items
             List<InventoryEntity> inventoryItems = new ArrayList<>();
@@ -63,7 +63,7 @@ public class PlayerViewModel extends AndroidViewModel {
             // Add default items to the list
 
             for (int i = 0; i < player.getInventorySize(); i++){
-            inventoryItems.add(new InventoryEntity(playerId, "empty", "empty", 1));
+            inventoryItems.add(new InventoryEntity("empty", "empty", 1));
 
             }
 
@@ -155,12 +155,11 @@ public class PlayerViewModel extends AndroidViewModel {
                 Item item = player.getInventoryItem(i);
 
                     // Update the InventoryEntity with the item's data
-                    inventoryEntity.setPlayerId(playerId);
                     inventoryEntity.setName(item.getName());
                     inventoryEntity.setType(item.getType());
-                    inventoryEntity.setQuantity(item.getQuantity()); // Assuming Item has a `getQuantity()` method
+                    inventoryEntity.setQuantity(item.getQuantity());
 
-                // Update the database
+                // Update the database with each inventory item
                 DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().insertInventory(inventoryEntity);
             }
 
@@ -172,13 +171,12 @@ public class PlayerViewModel extends AndroidViewModel {
                         .equipmentDao()
                         .getEquipmentById(j + 1); // Assuming IDs start at 1 and match indices
 
-                // Get the item from the player's inventory
+                // Get the item from the player's equipment inventory
                 Item item = player.getEquippedItem(j);
 
                 // Update the InventoryEntity with the item's data
                 equipmentEntity.setName(item.getName());
                 equipmentEntity.setType(item.getType());
-
 
                 // Update the database
                 DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().insertEquipment(equipmentEntity);
@@ -425,7 +423,7 @@ public class PlayerViewModel extends AndroidViewModel {
                 for (int i = currentSize; i < newSize; i++) {
                     player.inventoryItems.add(player.empty);
                     DatabaseClient.getInstance(application).getAppDatabase().inventoryDao()
-                            .insertInventory(new InventoryEntity(1, "empty", "empty", 1));
+                            .insertInventory(new InventoryEntity("empty", "empty", 1));
                 }
 
                 // Notify observers

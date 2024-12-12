@@ -13,12 +13,12 @@ public class InventoryEntity {
     private String name;
     private String type;
     private int quantity;
-    private int playerId;
+
 
     // Constructor
-    public InventoryEntity(int playerId, String name, String type, int quantity){
+    public InventoryEntity(String name, String type, int quantity){
 
-       this.playerId = playerId;
+
         this.name = name;
         this.type = type;
         this.quantity = quantity;
@@ -32,13 +32,7 @@ public class InventoryEntity {
         this.id = id;
     }
 
-    public int getPlayerId() {
-        return playerId;
-    }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
-    }
 
     public String getName() {
         return name;

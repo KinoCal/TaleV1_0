@@ -12,6 +12,7 @@ import com.example.talev1_0.monsters.BaseMonster;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Player {
     private String userName;
@@ -457,8 +458,9 @@ public class Player {
     }
 
     public int calculateDamageDealt(BaseMonster monster){
+        Random random = new Random();
         int monsterArmor = monster.getArmorValue();
-        int damageDealt = damage - monsterArmor;
+        int damageDealt = random.nextInt(damage);
         if (damageDealt < 0){
             damageDealt = 0;
         }

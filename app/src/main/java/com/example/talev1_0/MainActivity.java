@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.talev1_0.player.PlayerViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
-public class MainActivity extends AppCompatActivity implements MenuFragment.OnMenuItemClickListener,FragmentChangeListener {
+public class MainActivity extends AppCompatActivity implements MenuFragment.OnMenuItemClickListener, FragmentChangeListener {
 
     // Define IDs for the fragment containers
     private static final int MAIN_FRAGMENT_CONTAINER_ID = R.id.main_fragment_container;
@@ -39,10 +39,10 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
         }
 
         // Load the ChatFragment
-        getSupportFragmentManager().beginTransaction()
+        /*getSupportFragmentManager().beginTransaction()
                 .replace(PLAYER_CHAT_WINDOW_CONTAINER_ID, new ChatFragment())
                 .commit();
-
+*/
         // Load the MenuFragment
         getSupportFragmentManager().beginTransaction()
                 .replace(MENU_FRAGMENT_CONTAINER_ID, new MenuFragment())
