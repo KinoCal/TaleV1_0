@@ -2,6 +2,7 @@ package com.example.talev1_0.player;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -46,6 +47,35 @@ public class PlayerViewModel extends AndroidViewModel {
         savePlayerToDatabase(player, 1); // Save to Room when ViewModel is cleared
     }
 
+    public void registerPlayer(String username, String password) {
+        new Thread(() -> {
+            PlayerEntity playerEntity = new PlayerEntity();
+            playerEntity.setUsername(username);
+            playerEntity.setPassword(password);
+
+            PlayerService playerService = RetrofitClient.getInstance().create(PlayerService.class);
+            playerService.registerPlayer(playerEntity).enqueue(new Callback<>() {
+
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if (response.isSuccessful()) {
+                        messageLiveData.postValue("Registration successful you may login now!");
+                        System.out.println("Registration successful");
+                    } else {
+                        messageLiveData.postValue("Registration failed: Username already exists");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    messageLiveData.postValue("Registration failed: " + t.getMessage());
+                }
+            });
+        }).start();
+        Log.d("PlayerDebug", "Username during registration: " + player.getUsername());
+
+    }
+
     public void loginPlayer(String username, String password) {
         new Thread(() -> {
             PlayerEntity playerEntity = new PlayerEntity();
@@ -53,7 +83,7 @@ public class PlayerViewModel extends AndroidViewModel {
             playerEntity.setPassword(password);
 
             PlayerService playerService = RetrofitClient.getInstance().create(PlayerService.class);
-            playerService.loginPlayer(playerEntity).enqueue(new Callback<PlayerEntity>() {
+            playerService.loginPlayer(playerEntity).enqueue(new Callback<>() {
                 @Override
                 public void onResponse(Call<PlayerEntity> call, Response<PlayerEntity> response) {
                     if (response.isSuccessful() && response.body() != null) {
@@ -215,36 +245,22 @@ public class PlayerViewModel extends AndroidViewModel {
 
             // Push updated data to Spring Boot backend
             PlayerService playerService = RetrofitClient.getInstance().create(PlayerService.class);
-            playerService.registerPlayer(playerEntity).enqueue(new Callback<Void>() {
+            playerService.updatePlayer(playerEntity).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
-                        Log.d("SavePlayer", "Player data synced successfully with backend");
+                        Log.d("SavePlayer", "Player data saved to spring");
                     } else {
-                        Log.e("SavePlayer", "Failed to sync player data with backend");
-                        playerService.updatePlayer(playerEntity).enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                if (response.isSuccessful()) {
-                                    Log.d("SavePlayer", "Player data saved to spring");
-                                } else {
-                                    Log.e("SavePlayer", "Failed to save player to spring");
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-
-                            }
-                        });
+                        Log.e("SavePlayer", "Failed to save player to spring");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Log.e("SavePlayer", "Error: " + t.getMessage());
+                    Log.e("SavePlayer", "Error: saving player" + t.getMessage());
                 }
             });
+
             /*
             // Save the player's inventory data
             for (int i = 0; i < player.inventoryItems.size(); i++) {

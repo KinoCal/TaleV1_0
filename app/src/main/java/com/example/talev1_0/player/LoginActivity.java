@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         playerViewModel.getMessageLiveData().observe(this, message -> {
             Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
 
-            if (message.equals("Registration successful") || message.equals("Login successful")) {
+            if (message.equals("Login successful")) {
                 // Navigate to main game activity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -59,10 +59,10 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(v -> {
             String username = usernameEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
+            playerViewModel.setPassword(password);
+            playerViewModel.setUserName(username);
             if (validateInputs(username, password)) {
-                playerViewModel.setPassword(password);
-                playerViewModel.setUserName(username);
-                playerViewModel.registerPlayer();
+                playerViewModel.registerPlayer(username, password);
             }
         });
 
@@ -71,9 +71,9 @@ public class LoginActivity extends AppCompatActivity {
             String username = usernameEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
 
-            playerViewModel.setUserName(username);
-            playerViewModel.setPassword(password);
             if (validateInputs(username, password)) {
+                playerViewModel.setUserName(username);
+                playerViewModel.setPassword(password);
                 playerViewModel.loginPlayer(username, password);
             }
         });
