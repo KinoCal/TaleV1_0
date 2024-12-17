@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.Theme.TaleV1_0" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="android:popupMenuStyle">@drawable/popup_menu_background</item>
+        <item name="android:itemBackground">@drawable/menu_item_background</item>
+
+        <item name="android:textColor">@color/black</item> <!-- Example: Red -->
+
+    </style>
+</resources>

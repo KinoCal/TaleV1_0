@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?attr/actionBarSize"
+        tools:context=".StatsFragment">
+
+    <!-- Scrollable container -->
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:paddingTop="12dp">
+
+        <!-- Main container -->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <!-- Section: Player Stats -->
+            <LinearLayout
+                    android:id="@+id/player_stats_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@drawable/border_rounded">
+
+                <!-- Header -->
+                <TextView
+                        android:id="@+id/player_stats_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Player Stats"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingBottom="8dp" />
+
+                <!-- Available Stat Points -->
+                <TextView
+                        android:id="@+id/player_stat_points"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stat Points Available: 5"
+                        android:textSize="20sp"
+                        android:paddingBottom="16dp" />
+
+                <!-- Strength Stat -->
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                    <TextView
+                            android:id="@+id/player_strength_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Strength: 100"
+                            android:textSize="20sp" />
+
+                    <Button
+                            android:id="@+id/increase_strength_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Level Up" />
+                </LinearLayout>
+
+                <!-- Defense Stat -->
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="8dp">
+
+                    <TextView
+                            android:id="@+id/player_defense_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Defense: 100"
+                            android:textSize="20sp" />
+
+                    <Button
+                            android:id="@+id/increase_defense_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Level Up" />
+                </LinearLayout>
+
+                <!-- Add more stats as needed -->
+
+            </LinearLayout>
+
+            <!-- Section: Derived Stats -->
+            <LinearLayout
+                    android:id="@+id/derived_stats_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/border_rounded">
+
+                <!-- Header -->
+                <TextView
+                        android:id="@+id/derived_stats_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Derived Stats"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingBottom="8dp" />
+
+                <!-- Damage Range -->
+                <TextView
+                        android:id="@+id/damage_range_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Damage Range: 10-15"
+                        android:textSize="20sp"
+                        android:paddingBottom="8dp" />
+
+                <!-- Damage -->
+                <TextView
+                        android:id="@+id/player_damage_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Damage: 12"
+                        android:textSize="20sp"
+                        android:paddingBottom="8dp" />
+
+                <!-- Armor -->
+                <TextView
+                        android:id="@+id/player_armor_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Armor: 8"
+                        android:textSize="20sp"
+                        android:paddingBottom="8dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</FrameLayout>
