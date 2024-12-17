@@ -2,7 +2,6 @@ package com.example.talev1_0.player;
 //MAKE A GET INVENTORY FUNCTION THAT DISPLAYS THE PLAYERS INVO INFO TO THE UI UPDATE TEXT AREA
 //
 
-import com.example.talev1_0.Factories.ItemFactories.Factories;
 import com.example.talev1_0.gameItems.conreteClasses.equipment.ArmorItem;
 import com.example.talev1_0.gameItems.conreteClasses.equipment.WeaponItem;
 
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Player {
-    private String userName;
+    private String username;
     private String password;
     private WeaponItem currentWeapon;
     private ArmorItem currentArmor;
@@ -31,6 +30,7 @@ public class Player {
     private int defenceStat;
     private int level;
     private int gold;
+    private int statPoints;
     private double attackSpeed;
     private int damage;
     private int armor;
@@ -42,8 +42,8 @@ public class Player {
     private int shopItemIndex;
     private int inventorySize;
     public Item empty = new Item_Empty();
-    public Item emptyWeapon = new WeaponItem(0, "empty", "weapon", "empty", 0, 0, 1, 0);
-    public Item emptyArmour = new ArmorItem(1, "empty", "armor", "empty", 0, 0, 1, 0);
+    public Item emptyWeapon = new WeaponItem(0, "empty", "weapon", "empty", 0, 0, 1);
+    public Item emptyArmour = new ArmorItem(1, "empty", "armor", "empty", 0, 0, 1);
 
 
     public Item[] equippedItems = new Item[2];
@@ -64,6 +64,7 @@ public class Player {
         currentWeapon = (WeaponItem) equippedItems[0];
         currentArmor = (ArmorItem) equippedItems[1];
 
+        statPoints = 0;
         level = 1;
         maxHp = 10;
         currentHp = maxHp;
@@ -73,8 +74,8 @@ public class Player {
         strengthStat = 1;
         defenceStat = 1;
         damageDealt = 0;
-        damage = currentWeapon.getDamageValue() + getStrengthStat();
-        armor = currentArmor.getArmorValue();
+        damage = 0;
+        armor = 0;
         currentExp = 0;
         maxExp = level * 10;
         gold = 100;
@@ -217,12 +218,11 @@ public class Player {
     }
 
     private void levelUp() {
-        setStrengthStat(getStrengthStat() + 1);
         setMaxHp(getMaxHp() + 5);
         setLevel(getLevel() + 1);
         setCurrentExp(0);
         setMaxExp(getLevel() * 10);
-
+        increaseStatPoints(5);
 
     }
 
@@ -335,6 +335,10 @@ public class Player {
         this.strengthStat = strengthStat;
     }
 
+    public void increaseStrengthStat(int amount) {
+        this.strengthStat += amount;
+    }
+
 
     public int getDefenceStat() {
         return defenceStat;
@@ -345,9 +349,14 @@ public class Player {
         this.defenceStat = defenceStat;
     }
 
+    public void increaseDefenceStat(int amount) {
+        this.defenceStat += amount;
+    }
+
     @Override
     public String toString() {
         return "Player{" +
+                username + "//" +
                 "currentWeapon=" + currentWeapon.getName() +
                 ", currentArmor=" + currentArmor.getName() +
                 ", maxHp=" + maxHp +
@@ -406,12 +415,12 @@ public class Player {
         this.inventorySize = inventorySize;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 
@@ -442,13 +451,30 @@ public class Player {
     public int calculateDamageDealt(BaseMonster monster) {
         Random random = new Random();
         int monsterArmor = monster.getArmorValue();
-        int damageDealt = random.nextInt(damage);
+
+        // Ensure damage is at least as high as strengthStat
+        int minDamage = strengthStat;
+        int maxDamage = getDamage();
+
+        // If strengthStat is greater than or equal to maxDamage, default to strengthStat
+        if (minDamage >= maxDamage) {
+            return minDamage;
+        }
+
+        // Generate random damage between minDamage (inclusive) and maxDamage (inclusive)
+        int damageDealt = random.nextInt(maxDamage - minDamage + 1) + minDamage;
+
+        // Subtract monster's armor value
+        //damageDealt -= monsterArmor;
+
+        // Ensure damage isn't negative
         if (damageDealt < 0) {
             damageDealt = 0;
         }
 
         return damageDealt;
     }
+
 
     public List<Item> getConsumableItemList() {
         List<Item> consumableList = new ArrayList<>();
@@ -459,6 +485,19 @@ public class Player {
         }
         return consumableList;
     }
+
+    public int getStatPoints() {
+        return statPoints;
+    }
+
+    public void setStatPoints(int amount) {
+        statPoints = amount;
+    }
+
+    public void increaseStatPoints(int amount) {
+        this.statPoints += amount;
+    }
+
 
 }
 

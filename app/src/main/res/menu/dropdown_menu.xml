@@ -4,6 +4,9 @@
             android:id="@+id/nav_inventory"
             android:title="Inventory" />
     <item
+            android:title="Stats"
+            android:id="@+id/nav_stats" />
+    <item
             android:id="@+id/nav_map"
             android:title="Map" />
     <item

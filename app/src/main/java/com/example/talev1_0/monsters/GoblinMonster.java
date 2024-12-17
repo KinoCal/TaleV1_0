@@ -8,18 +8,26 @@ public class GoblinMonster extends BaseMonster implements MonsterInterface {
         super("Goblin", "Monster", 10, 2, 3, 1);
 
         //Common
-        addItemToLootTable("weapon", "Dagger");
-        addItemToLootTable("weapon", "Short Sword");
-        addItemToLootTable("armor", "Cloth Body");
-        addItemToLootTable("consumable", "Hp Potion");
+        addCommonDrop("empty", "empty");
+        addCommonDrop("empty", "empty");
+        addCommonDrop("empty", "empty");
+        addCommonDrop("weapon", "Dagger");
+        addCommonDrop("weapon", "Short Sword");
+        addCommonDrop("armor", "Cloth Body");
+        addCommonDrop("consumable", "Hp Potion");
         //Rare
-        addItemToLootTable("weapon", "Sword");
-        addItemToLootTable("weapon", "Long Sword");
-        addItemToLootTable("armor", "Goblin Armor");
-        //Epic
-        addItemToLootTable("weapon", "Mace");
-        //Legendary
-        addItemToLootTable("weapon", "God Sword");
+        addRareDrop("empty", "empty");
+        addRareDrop("empty", "empty");
+        addRareDrop("empty", "empty");
+        addRareDrop("consumable", "Big Hp Potion");
+        addRareDrop("consumable", "Large Hp Potion");
+        //Super Rare
+        addSuperRareDrop("empty", "empty");
+        addSuperRareDrop("empty", "empty");
+        addSuperRareDrop("empty", "empty");
+        addSuperRareDrop("weapon", "Mace");
+        addSuperRareDrop("weapon", "God Sword");
+
 
     }
 }

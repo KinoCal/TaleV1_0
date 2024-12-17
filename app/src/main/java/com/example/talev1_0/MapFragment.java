@@ -90,7 +90,7 @@ public class MapFragment extends Fragment {
     }
 
     private void showMonsterDropTable(BaseMonster monster) {
-        List<Item> lootTable = monster.getLootTable();
+        List<Item> lootTable = monster.getAllDropTables();
 
         LootDialogFragment dialogFragment = new LootDialogFragment();
         dialogFragment.setLootTable(lootTable);

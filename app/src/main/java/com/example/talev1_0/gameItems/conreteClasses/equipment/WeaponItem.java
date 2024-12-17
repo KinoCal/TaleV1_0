@@ -5,10 +5,10 @@ import com.example.talev1_0.gameItems.abstractClasses.Item;
 import com.example.talev1_0.gameItems.interfaces.Weapon;
 
 public class WeaponItem extends Item implements Weapon {
-        private int damageValue;
+    private int damageValue;
 
-    public WeaponItem(int itemIndex,String name, String type, String rarity, int price, int damageValue, int quantity, int rarityValue) {
-        super(itemIndex,name, type, rarity, price, quantity, rarityValue);
+    public WeaponItem(int itemIndex, String name, String type, String rarity, int price, int damageValue, int quantity) {
+        super(itemIndex, name, type, rarity, price, quantity);
         this.damageValue = damageValue;
     }
 
@@ -21,5 +21,6 @@ public class WeaponItem extends Item implements Weapon {
     public void setDamageValue(int damageValue) {
         this.damageValue = damageValue;
     }
+
 
 }

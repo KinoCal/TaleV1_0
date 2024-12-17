@@ -9,38 +9,33 @@ public abstract class Item implements com.example.talev1_0.gameItems.interfaces.
     private String rarity;
     private int price;
     private int quantity;
-    private int rarityValue;
 
-    public Item( int itemIndex, String name, String type, String rarity, int price, int quantity, int rarityValue){
+    public Item(int itemIndex, String name, String type, String rarity, int price, int quantity) {
         this.itemIndex = itemIndex;
         this.name = name;
         this.type = type;
         this.rarity = rarity;
         this.price = price;
         this.quantity = quantity;
-        this.rarityValue = rarityValue;
     }
-    public Item(){
+
+    public Item() {
 
     }
 
     @Override
-    public String ToString(){
+    public String ToString() {
 
         return this.name + " " + "(" + this.quantity + ")";
     }
 
-    public void increaseQuantity(int amount){
+    public void increaseQuantity(int amount) {
         this.quantity += amount;
-    }
-    @Override
-    public int getQuantity() {
-        return this.quantity;
     }
 
     @Override
-    public int getRarityValue() {
-        return rarityValue;
+    public int getQuantity() {
+        return this.quantity;
     }
 
     @Override
@@ -52,8 +47,12 @@ public abstract class Item implements com.example.talev1_0.gameItems.interfaces.
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
     @Override
-    public int getItemIndex(){return itemIndex;}
+    public int getItemIndex() {
+        return itemIndex;
+    }
+
     @Override
     public String getName() {
         return name;

@@ -8,11 +8,12 @@ import androidx.room.Update;
 
 @Dao
 public interface PlayerDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertPlayer(PlayerEntity playerEntity);
+    void insertPlayer(PlayerEntity player);
 
-    @Query("SELECT * FROM player_table WHERE id = :id LIMIT 1")
-    PlayerEntity getPlayerById(int id);
+    @Query("SELECT * FROM player_table WHERE id = :playerId LIMIT 1")
+    PlayerEntity getPlayerById(int playerId);
 }
+
+
 

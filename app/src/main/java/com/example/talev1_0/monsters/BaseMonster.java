@@ -2,6 +2,7 @@ package com.example.talev1_0.monsters;
 
 import com.example.talev1_0.Factories.ItemFactories.Factories;
 import com.example.talev1_0.gameItems.abstractClasses.Item;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,9 @@ public abstract class BaseMonster implements MonsterInterface {
     private int damageDealt;
     private List<Item> lootTable;
     private Factories factories;
+    private final List<Item> commonDropTable = new ArrayList<>();
+    private final List<Item> rareDropTable = new ArrayList<>();
+    private final List<Item> superRareDropTable = new ArrayList<>();
 
     public BaseMonster(String name, String type, int hp, int level, int damage, int armor) {
         this.name = name;
@@ -28,23 +32,13 @@ public abstract class BaseMonster implements MonsterInterface {
         this.armor = armor;
         this.hp = hp;
         this.maxHp = hp;
-        this.xp = level *3;
-        this.attackSpeed = 4.0;
+        this.xp = level * 3;
+        this.attackSpeed = 3.5;
         this.damageDealt = 0;
         this.lootTable = new ArrayList<>(); // Initialize as an empty ArrayList
         this.factories = new Factories();
     }
 
-    @Override
-    public List<Item> getLootTable() {
-        return lootTable;
-    }
-
-    @Override
-    public void addItemToLootTable(String type, String name) {
-
-        lootTable.add(factories.createItem(type,name));
-    }
 
     @Override
     public Item getItemFromLootTable(int index) {
@@ -63,7 +57,7 @@ public abstract class BaseMonster implements MonsterInterface {
         }
     }
 
-@Override
+    @Override
     public String getName() {
         return name;
     }
@@ -161,6 +155,69 @@ public abstract class BaseMonster implements MonsterInterface {
     @Override
     public void setXpValue(int xpValue) {
         xp = xpValue;
+    }
+
+
+    public void addCommonDrop(String type, String name) {
+        commonDropTable.add(factories.createItem(type, name));
+
+    }
+
+    public void addRareDrop(String type, String name) {
+        rareDropTable.add(factories.createItem(type, name));
+
+    }
+
+    public void addSuperRareDrop(String type, String name) {
+        superRareDropTable.add(factories.createItem(type, name));
+
+    }
+
+    public List<Item> getCommonDropTable() {
+        return commonDropTable;
+    }
+
+    public List<Item> getRareDropTable() {
+        return rareDropTable;
+    }
+
+    public List<Item> getSuperRareDropTable() {
+        return superRareDropTable;
+    }
+
+    public List<Item> getAllDropTables() {
+        List<Item> tempList = new ArrayList<>();
+
+        for (int i = 0; i < getCommonDropTable().size(); i++) {
+            if (!getCommonDropTable().get(i).getName().equals("empty")) {
+                tempList.add(getCommonDropTable().get(i));
+
+            } else {
+
+            }
+
+        }
+
+        for (int i = 0; i < getRareDropTable().size(); i++) {
+            if (!getRareDropTable().get(i).getName().equals("empty")) {
+                tempList.add(getRareDropTable().get(i));
+
+            } else {
+
+            }
+
+        }
+
+        for (int i = 0; i < getSuperRareDropTable().size(); i++) {
+            if (!getSuperRareDropTable().get(i).getName().equals("empty")) {
+                tempList.add(getSuperRareDropTable().get(i));
+
+            } else {
+
+            }
+
+        }
+        return tempList;
     }
 
 }

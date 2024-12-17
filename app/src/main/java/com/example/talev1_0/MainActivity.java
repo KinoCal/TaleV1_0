@@ -5,12 +5,16 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -30,7 +34,14 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Force Light Theme
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        // Customize navigation bar color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setNavigationBarColor(ContextCompat.getColor(this, R.color.dark_gray_background)); // Replace with your desired color
+        }
         // Check for internet connectivity
         if (isInternetAvailable()) {
             Toast.makeText(this, "Internet is available", Toast.LENGTH_SHORT).show();
@@ -64,13 +75,18 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
     @Override
     protected void onPause() {
         super.onPause();
-        savePlayerData();
+        PlayerViewModel playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
+
+        playerViewModel.savePlayer();
+
     }
 
+    @Override
+    protected void onResume() {
 
-    private void savePlayerData() {
+        super.onResume();
         PlayerViewModel playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
-        playerViewModel.savePlayer();
+        playerViewModel.initializePlayer(1);
     }
 
 
@@ -87,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements MenuFragment.OnMe
         } else if (itemId == R.id.nav_shop) {
 
             selectedFragment = new ShopFragment();
+        } else if (itemId == R.id.nav_stats) {
+
+            selectedFragment = new StatsFragment();
         }
         // Add more cases as needed
 

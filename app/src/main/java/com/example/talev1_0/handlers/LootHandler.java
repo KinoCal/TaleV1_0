@@ -12,65 +12,37 @@ import java.util.Random;
 
 public class LootHandler {
 
-    public Item determinePlayerLoot(MonsterViewModel monster){
+    final Random random = new Random();
 
-        String itemRarity;
-        Random random = new Random();
-        int randomNumber = random.nextInt(100);
+    public Item rollForLoot(MonsterViewModel monster) {
+        int roll = random.nextInt(555); // Roll a number between 0 and 554
 
-        if (randomNumber < RarityValues.COMMON){
-            System.out.println(randomNumber);
-            itemRarity = "common";
-                return rollForLoot(monster, itemRarity);
+        if (roll < 500) {
+            System.out.println("Player rolled a: " + roll + " ON THE DROP TABLE");
+            // Common loot
+            return rollForLoot(monster.getCommonDropTable());
 
-        } else if (randomNumber < RarityValues.RARE) {
-            System.out.println(randomNumber);
-            itemRarity = "rare";
-                return rollForLoot(monster, itemRarity);
-
-        } else if (randomNumber < RarityValues.EPIC) {
-            System.out.println(randomNumber);
-            itemRarity = "epic";
-                return rollForLoot(monster, itemRarity);
-
-        } else if (randomNumber < RarityValues.LEGENDARY) {
-            System.out.println(randomNumber);
-            itemRarity = "legendary";
-                return rollForLoot(monster, itemRarity);
-
-        }else {
-            System.out.println(randomNumber);
-            System.out.println("error in determineplayerloot logic");
+        } else if (roll < 550) {
+            System.out.println("Player rolled a: " + roll + " ON THE DROP TABLE");
+            // Rare loot
+            return rollForLoot(monster.getRareDropTable());
+        } else if (roll <= 555) {
+            System.out.println("Player rolled a: " + roll + " ON THE DROP TABLE");
+            // Super rare loot
+            return rollForLoot(monster.getSuperRareDropTable());
+        } else {
+            System.out.println("error in rollforloot logic***");
+            return null;
         }
-        return null;
+
     }
 
-    public Item rollForLoot(MonsterViewModel monster, String itemRarity) {
-        // Initialize tempList
-        List<Item> tempList = new ArrayList<>();
-
-        for (Item item : monster.getLootTable()) {
-            if (item.getRarityName().equals(itemRarity)) {
-                tempList.add(item); // Add item to the tempList
-
-            }else {
-                System.out.println("no loot");
-            }
+    private Item rollForLoot(List<Item> dropTable) {
+        if (dropTable.isEmpty()) {
+            return null; // No items in this drop table
         }
-
-        int index = 1;
-        for (Item item1 : tempList){
-            System.out.print(index++ + ": ");
-            System.out.println(item1.getName() + " temp list test");
-        }
-
-        // Roll randomly within the tempList
-        if (!tempList.isEmpty()) {
-            Random random = new Random();
-            int randomIndex = random.nextInt(tempList.size());
-            return tempList.get(randomIndex);
-        }
-
-        return null; // No items match the rolledNumber
+        int index = random.nextInt(dropTable.size()); // Random index from 0 to size-1
+        return dropTable.get(index);
     }
+
 }

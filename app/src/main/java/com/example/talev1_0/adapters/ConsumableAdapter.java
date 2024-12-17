@@ -19,6 +19,7 @@ public class ConsumableAdapter extends RecyclerView.Adapter<ConsumableAdapter.Co
 
     private List<Item> inventoryItems;
     private PlayerViewModel playerViewModel;
+    InventoryManager inventoryManager = new InventoryManager();
 
 
     public ConsumableAdapter(List<Item> inventoryItems, PlayerViewModel playerViewModel) {
@@ -38,25 +39,50 @@ public class ConsumableAdapter extends RecyclerView.Adapter<ConsumableAdapter.Co
 
     @Override
     public void onBindViewHolder(@NonNull ConsumableViewHolder holder, int position) {
-        Item inventoryItem = inventoryItems.get(position);
+        // Get the corresponding consumable item based on position
+        int actualIndex = getActualIndex(position);
+        Item inventoryItem = inventoryItems.get(actualIndex);
+
         if (inventoryItem.getType().equals("consumable")) {
             holder.consumableItemTextView.setText(inventoryItem.getName() + " (" + inventoryItem.getQuantity() + ")");
         } else {
-            System.out.println("error in consumable adapter viewholder");
+            System.out.println("Error: Non-consumable item passed to the adapter.");
         }
 
         // Set the click listener for the TextView
         holder.consumableItemTextView.setOnClickListener(v -> {
-            InventoryManager inventoryManager = new InventoryManager();
-            inventoryManager.useItem(position, playerViewModel);// Pass the clicked item
+            if (inventoryItem.getQuantity() > 1) {
+                inventoryManager.useItemInConsumableAdapter(inventoryItem, playerViewModel); // Use the item
+            } else {
+                inventoryManager.useItemInConsumableAdapter(inventoryItem, playerViewModel); // Use the last item
+                holder.consumableItemTextView.setText("");
+                playerViewModel.getInventoryItems().set(actualIndex, playerViewModel.getEmptyItem());
+                notifyDataSetChanged(); // Refresh the RecyclerView
+            }
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return inventoryItems.size();
+        return (int) inventoryItems.stream().filter(item -> item.getType().equals("consumable")).count();
     }
+
+    /**
+     * Helper method to find the actual index in the inventory list for the given filtered position.
+     */
+    private int getActualIndex(int filteredPosition) {
+        int count = 0;
+        for (int i = 0; i < inventoryItems.size(); i++) {
+            if (inventoryItems.get(i).getType().equals("consumable")) {
+                if (count == filteredPosition) {
+                    return i;
+                }
+                count++;
+            }
+        }
+        throw new IllegalStateException("Filtered position out of bounds");
+    }
+
 
     static class ConsumableViewHolder extends RecyclerView.ViewHolder {
         TextView consumableItemTextView;

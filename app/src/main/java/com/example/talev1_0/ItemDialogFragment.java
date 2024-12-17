@@ -77,15 +77,11 @@ public class ItemDialogFragment extends DialogFragment {
 
         SetupUiForSelectedInventoryItem(selectedItem);
 
-        useButton.setOnClickListener(v -> {
-            inventoryManager.useItem(playerViewModel.getPlayerItemIndex(), playerViewModel);
-            //useButton.setVisibility(View.INVISIBLE);
-        });
 
-        // EQUIP / UN-EQUIP ITEM BUTTONS
+        // Use Button
         useButton.setOnClickListener(v -> {
-            inventoryManager.useItem(playerViewModel.getPlayerItemIndex(), playerViewModel);
-            if (this != null && this.isVisible()) {
+            inventoryManager.useItem(selectedItem, playerViewModel);
+            if (this != null && this.isVisible() && selectedItem.getQuantity() <= 1) {
                 this.dismissNow();
             }
         });
@@ -125,7 +121,7 @@ public class ItemDialogFragment extends DialogFragment {
 
             selectedItemName.setText("Name: " + armorItem.getName());
             selectedItemPrice.setText("Price: " + String.valueOf(armorItem.getPrice()));
-            selectedItemDamageValue.setText("Damage" + "0");
+            selectedItemDamageValue.setText("Damage: " + "0");
             SelectedItemArmorValue.setText("Armor: " + String.valueOf(armorItem.getArmorValue()));
             selectedItemHealingValue.setText("Heals: " + "0");
             equipButton.setVisibility(isEquippedItem ? View.INVISIBLE : View.VISIBLE);
@@ -136,7 +132,7 @@ public class ItemDialogFragment extends DialogFragment {
             useButton.setVisibility(View.VISIBLE);
             selectedItemName.setText("Name: " + consumableItem.getName());
             selectedItemPrice.setText("Price: " + String.valueOf(consumableItem.getPrice()));
-            selectedItemDamageValue.setText("Damage" + "0");
+            selectedItemDamageValue.setText("Damage: " + "0");
             SelectedItemArmorValue.setText("Armor: " + "0");
             selectedItemHealingValue.setText("Heals: " + consumableItem.getHealingValue());
             equipButton.setVisibility(isEquippedItem ? View.INVISIBLE : View.INVISIBLE);

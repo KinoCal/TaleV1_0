@@ -1,6 +1,7 @@
 package com.example.talev1_0.player;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -18,11 +19,16 @@ import com.example.talev1_0.gameItems.conreteClasses.equipment.WeaponItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class PlayerViewModel extends AndroidViewModel {
     private final MutableLiveData<Player> playerLiveData = new MutableLiveData<>();
     private Player player; // Local reference to avoid redundant calls
     private final Application application;
     private Factories factories;
+    private MutableLiveData<String> messageLiveData = new MutableLiveData<>();
 
     public PlayerViewModel(Application application) {
         super(application);
@@ -31,11 +37,54 @@ public class PlayerViewModel extends AndroidViewModel {
         factories = new Factories();
         this.application = application;
 
-        initializePlayer(1);
+        //initializePlayer(1);
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        savePlayerToDatabase(player, 1); // Save to Room when ViewModel is cleared
+    }
+
+    public void loginPlayer(String username, String password) {
+        new Thread(() -> {
+            PlayerEntity playerEntity = new PlayerEntity();
+            playerEntity.setUsername(username);
+            playerEntity.setPassword(password);
+
+            PlayerService playerService = RetrofitClient.getInstance().create(PlayerService.class);
+            playerService.loginPlayer(playerEntity).enqueue(new Callback<PlayerEntity>() {
+                @Override
+                public void onResponse(Call<PlayerEntity> call, Response<PlayerEntity> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        messageLiveData.postValue("Login successful");
+
+                        // Convert response body to Player object
+                        player = mapEntityToPlayer(response.body());
+
+                        // Save to local Room database (overwriting existing data)
+                        savePlayerToDatabase(player, 1);
+
+                        // Update LiveData to notify UI observers
+                        playerLiveData.postValue(player);
+                    } else {
+                        messageLiveData.postValue("Login failed: Incorrect username or password");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PlayerEntity> call, Throwable t) {
+                    messageLiveData.postValue("Login failed: " + t.getMessage());
+                }
+            });
+        }).start();
+        Log.d("PlayerDebug", "Username after login: " + player.getUsername());
+
+    }
+
+
     // Initialize player from the database or create a new one
-    private void initializePlayer(int playerId) {
+    public void initializePlayer(int playerId) {
         new Thread(() -> {
             PlayerEntity playerEntity = DatabaseClient.getInstance(application).getAppDatabase().playerDao().getPlayerById(playerId);
 
@@ -45,9 +94,9 @@ public class PlayerViewModel extends AndroidViewModel {
             } else {
                 // No player found, create a new one
                 player = new Player(); // Initialize new player data
-                initializeEquipmentInDatabase();
-                initializeInventoryInDatabase();
-                savePlayerToDatabase(player, playerId); // Save to database with the given ID
+                //initializeEquipmentInDatabase();
+                //initializeInventoryInDatabase();
+                savePlayerToDatabase(player, 1); // Save to database with the given ID
 
 
             }
@@ -95,7 +144,14 @@ public class PlayerViewModel extends AndroidViewModel {
 
     // Helper to map InventoryEntity to players inventory, playerEntity to player and equipmentEntity to player
     private Player mapEntityToPlayer(PlayerEntity entity) {
+
         Player player = new Player();
+        if (entity.getUsername() != null && entity.getPassword() != null) {
+            player.setUsername(entity.getUsername());
+            player.setPassword(entity.getPassword());
+        } else {
+            Log.e("MAP_ENTITY", "PlayerEntity has null username or password");
+        }
         player.setLevel(entity.getLevel());
         player.setCurrentHp(entity.getCurrentHp());
         player.setMaxHp(entity.getMaxHp());
@@ -106,36 +162,43 @@ public class PlayerViewModel extends AndroidViewModel {
         player.setCurrentExp(entity.getCurrentExp());
         player.setMaxExp(entity.getMaxExp());
         player.setGold(entity.getGold());
+        player.setStatPoints(entity.getStatPoints());
+/*
+            // Retrieve inventory items
+            List<InventoryEntity> inventoryEntities = new ArrayList<>();
+            for (int i = 1; i < player.getInventorySize() + 1; i++) {
+                inventoryEntities.add(DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(i));
+            }
 
-        // Retrieve inventory items
-        List<InventoryEntity> inventoryEntities = new ArrayList<>();
-        for (int i = 1; i < player.getInventorySize() + 1; i++) {
-            inventoryEntities.add(DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(i));
-        }
+            // Correctly pass the correct inventory name for each item
+            for (int i = 0; i < player.getInventorySize(); i++) {
+                player.setInventoryItem(factories.createItem(inventoryEntities.get(i).getType(), inventoryEntities.get(i).getName()), i);
+                player.getInventoryItem(i).setQuantity(inventoryEntities.get(i).getQuantity());
+            }
 
-        // Correctly pass the correct inventory name for each item
-        for (int i = 0; i < player.getInventorySize(); i++) {
-            player.setInventoryItem(factories.createItem(inventoryEntities.get(i).getType(), inventoryEntities.get(i).getName()), i);
-            player.getInventoryItem(i).setQuantity(inventoryEntities.get(i).getQuantity());
-        }
+            // Retrieve equipment items
+            EquipmentEntity equipmentEntity1 = DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().getEquipmentById(1);
+            EquipmentEntity equipmentEntity2 = DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().getEquipmentById(2);
 
-        // Retrieve equipment items
-        EquipmentEntity equipmentEntity1 = DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().getEquipmentById(1);
-        EquipmentEntity equipmentEntity2 = DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().getEquipmentById(2);
-
-        // Pass database entities to the players equipment
-        player.setEquippedItems(factories.createItem(equipmentEntity1.getType(), equipmentEntity1.getName()), 0);
-        player.setEquippedItems(factories.createItem(equipmentEntity2.getType(), equipmentEntity2.getName()), 1);
+            // Pass database entities to the players equipment
+            player.setEquippedItems(factories.createItem(equipmentEntity1.getType(), equipmentEntity1.getName()), 0);
+            player.setEquippedItems(factories.createItem(equipmentEntity2.getType(), equipmentEntity2.getName()), 1);
+*/
 
         return player;
     }
 
 
     // Save player to the database
-    public void savePlayerToDatabase(Player player, int playerId) {
+    public void savePlayerToDatabase(Player player, int id) {
+        Log.d("PlayerInstance", "Player object: " + player);
+        Log.d("PlayerInstance", "Username: " + player.getUsername());
+
         new Thread(() -> {
             PlayerEntity playerEntity = new PlayerEntity(
-                    playerId, // Ensure the correct ID is assigned
+                    id,
+                    player.getUsername(),
+                    player.getPassword(),// Ensure the correct ID is assigned
                     player.getLevel(),
                     player.getCurrentHp(),
                     player.getMaxHp(),
@@ -145,9 +208,44 @@ public class PlayerViewModel extends AndroidViewModel {
                     player.getArmor(),
                     player.getCurrentExp(),
                     player.getMaxExp(),
-                    player.getGold()
+                    player.getGold(),
+                    player.getStatPoints()
             );
             DatabaseClient.getInstance(application).getAppDatabase().playerDao().insertPlayer(playerEntity);
+
+            // Push updated data to Spring Boot backend
+            PlayerService playerService = RetrofitClient.getInstance().create(PlayerService.class);
+            playerService.registerPlayer(playerEntity).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        Log.d("SavePlayer", "Player data synced successfully with backend");
+                    } else {
+                        Log.e("SavePlayer", "Failed to sync player data with backend");
+                        playerService.updatePlayer(playerEntity).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    Log.d("SavePlayer", "Player data saved to spring");
+                                } else {
+                                    Log.e("SavePlayer", "Failed to save player to spring");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e("SavePlayer", "Error: " + t.getMessage());
+                }
+            });
+            /*
             // Save the player's inventory data
             for (int i = 0; i < player.inventoryItems.size(); i++) {
                 // Retrieve the corresponding InventoryEntity from the database
@@ -183,7 +281,7 @@ public class PlayerViewModel extends AndroidViewModel {
                 // Update the database
                 DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().insertEquipment(equipmentEntity);
             }
-
+*/
 
         }).start();
     }
@@ -191,7 +289,11 @@ public class PlayerViewModel extends AndroidViewModel {
 
     // Save player data to the database
     public void savePlayer() {
-        savePlayerToDatabase(player, 1);
+        Player currentPlayer = playerLiveData.getValue();
+        System.out.println(currentPlayer);
+        savePlayerToDatabase(currentPlayer, 1);
+
+
     }
 
 
@@ -244,6 +346,7 @@ public class PlayerViewModel extends AndroidViewModel {
         player.gainXp(amount);
         playerLiveData.setValue(player);
     }
+
 
     public int getCurrentLevel() {
         return player.getLevel();
@@ -371,6 +474,21 @@ public class PlayerViewModel extends AndroidViewModel {
         playerLiveData.setValue(player);
     }
 
+    public void increaseStatPoints(int amount) {
+        player.increaseStatPoints(amount);
+        playerLiveData.setValue(player);
+    }
+
+    public void increaseStrengthStat(int amount) {
+        player.increaseStrengthStat(amount);
+        playerLiveData.setValue(player);
+    }
+
+    public void increaseDefenceStat(int amount) {
+        player.increaseDefenceStat(amount);
+        playerLiveData.setValue(player);
+    }
+
     public void setEnemyName(String name) {
         player.setEnemyName(name);
         playerLiveData.setValue(player);
@@ -386,11 +504,11 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
     public String getUserName() {
-        return player.getUserName();
+        return player.getUsername();
     }
 
     public void setUserName(String username) {
-        player.setUserName(username);
+        player.setUsername(username);
         playerLiveData.setValue(player);
     }
 
@@ -400,6 +518,7 @@ public class PlayerViewModel extends AndroidViewModel {
 
     public void setPassword(String password) {
         player.setPassword(password);
+        playerLiveData.setValue(player);
     }
 
     public Player getPlayer() {
@@ -431,6 +550,10 @@ public class PlayerViewModel extends AndroidViewModel {
                 playerLiveData.postValue(player);
             }
         }).start();
+    }
+
+    public LiveData<String> getMessageLiveData() {
+        return messageLiveData;
     }
 
 }

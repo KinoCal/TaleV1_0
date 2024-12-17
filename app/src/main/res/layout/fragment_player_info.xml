@@ -9,12 +9,12 @@
 
     <!-- Player Name -->
     <TextView
+
             android:id="@+id/player_name_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Player Name: JohnDoe"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
 
     <!-- Player Health -->
     <LinearLayout
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:scaleY="1"
                 android:layout_weight="1"
-                android:max= "100"
+                android:max="100"
                 android:progress="100"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp" />
@@ -84,6 +84,20 @@
                 android:layout_height="wrap_content"
                 android:text="EXP:"
                 android:textSize="16sp" />
+
+        <ProgressBar
+                android:progressDrawable="@drawable/rounded_progress_bar_exp"
+
+                android:id="@+id/player_exp_progressbar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scaleY="1"
+                android:layout_weight="1"
+                android:max="100"
+                android:progress="100"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
 
     </LinearLayout>

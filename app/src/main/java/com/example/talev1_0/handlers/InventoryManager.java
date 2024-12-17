@@ -12,33 +12,34 @@ public class InventoryManager {
 
     public void GivePlayerItem(PlayerViewModel player, Item item) {
 
-        // First pass: check for an existing item with the same name
-        for (Item tempItem : player.getInventoryItems()) {
+        // First pass: check if the item already exists in the inventory
+        for (int i = 0; i < player.getInventoryItems().size(); i++) {
+            Item currentItem = player.getInventoryItems().get(i);
 
-            if (!player.isInventoryFull() || tempItem.getName().equals(item.getName())) {
-                for (int i = 0; i < player.getInventoryItems().size(); i++) {
-                    if (player.getInventoryItems().get(i).getName().equals(item.getName())) {
-                        System.out.println("attempting to give player item..1 " + item.getName());
-                        player.getInventoryItems().get(i).increaseQuantity(1);
-                        System.out.println("item given to player 1 " + item.getName());
-                        break;
-
-                    } else if (player.getInventoryItems().get(i).getItemIndex() == 9) {
-                        System.out.println("attempting to give player item..2 " + item.getName());
-                        player.getInventoryItems().set(i, item); // Add the item to the empty slot
-                        System.out.println("item given to player 2 " + item.getName());
-                        break;
-                        // Exit the loop after placing the item
-                    }
-                }
-
-            } else {
-                System.out.println("sorry player inventory full");
-                System.out.println("attempted to give player item: " + item.getName());
+            // If the item exists, increase its quantity
+            if (currentItem.getName().equals(item.getName())) {
+                System.out.println("attempting to give player item..1 " + item.getName());
+                currentItem.increaseQuantity(1);
+                System.out.println("item given to player 1 " + item.getName());
+                return; // Exit the method since the item was added
             }
-            break;
         }
+
+        // Second pass: check for an empty slot to add the item
+        for (int i = 0; i < player.getInventoryItems().size(); i++) {
+            if (player.getInventoryItems().get(i).getName().equals("empty")) {
+                System.out.println("attempting to give player item..2 " + item.getName());
+                player.getInventoryItems().set(i, item); // Place the item in the empty slot
+                System.out.println("item given to player 2 " + item.getName());
+                return; // Exit the method since the item was added
+            }
+        }
+
+        // If no empty slot was found and the inventory is full
+        System.out.println("sorry player inventory full");
+        System.out.println("attempted to give player item: " + item.getName());
     }
+
 
     public boolean BuyItem(PlayerViewModel player, Item item) {
         boolean itemSold = false;
@@ -101,24 +102,42 @@ public class InventoryManager {
         return itemSold;
     }
 
-    public void useItem(int slotNumber, PlayerViewModel playerViewModel) {
-        Item currentItem = playerViewModel.getInventoryItemAtIndex(slotNumber);
+    public void useItem(Item item, PlayerViewModel player) {
 
-        if (currentItem instanceof ConsumableItem consumableItem) {
+        if (item instanceof ConsumableItem consumableItem) {
             // Heal the player
-            playerViewModel.healPlayer(consumableItem.getHealingValue());
+            player.healPlayer(consumableItem.getHealingValue());
             System.out.println("Player healed for: " + consumableItem.getHealingValue());
             System.out.println("Player used item: " + consumableItem.getName());
 
-            if (currentItem.getQuantity() > 1) {
-                currentItem.increaseQuantity(-1);
+            if (item.getQuantity() > 1) {
+                item.increaseQuantity(-1);
             } else {
                 // Replace with an empty item
-                playerViewModel.getInventoryItems().set(slotNumber, playerViewModel.getEmptyItem());
+                player.getInventoryItems().set(player.getPlayerItemIndex(), player.getEmptyItem());
             }
             // Trigger LiveData update
-            playerViewModel.updatePlayerLiveData();
+            player.updatePlayerLiveData();
         }
+    }
+
+    public void useItemInConsumableAdapter(Item item, PlayerViewModel player) {
+        if (item instanceof ConsumableItem consumableItem) {
+            // Heal the player
+            player.healPlayer(consumableItem.getHealingValue());
+            System.out.println("Player healed for: " + consumableItem.getHealingValue());
+            System.out.println("Player used item: " + consumableItem.getName());
+
+            if (item.getQuantity() > 1) {
+                item.increaseQuantity(-1);
+            } else {
+                // Replace with an empty item
+
+            }
+            // Trigger LiveData update
+            player.updatePlayerLiveData();
+        }
+
     }
 
 

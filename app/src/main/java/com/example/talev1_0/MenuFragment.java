@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -88,6 +89,9 @@ public class MenuFragment extends Fragment {
             //Toast.makeText(getContext(), "Map Selected", Toast.LENGTH_SHORT).show();
         } else if (item.getItemId() == R.id.nav_shop) {
             updateCurrentTitle("Shop");
+            //Toast.makeText(getContext(), "Shop Selected", Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == R.id.nav_stats) {
+            updateCurrentTitle("Stats");
             //Toast.makeText(getContext(), "Shop Selected", Toast.LENGTH_SHORT).show();
         }
     }

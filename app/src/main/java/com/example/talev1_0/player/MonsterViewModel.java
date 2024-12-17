@@ -25,55 +25,62 @@ public class MonsterViewModel extends ViewModel {
     // Method to update the monster's health
     public void decreaseMonsterHp(int hpChange) {
         BaseMonster monster = currentMonster.getValue();
-        if (monster != null)
-        {
+        if (monster != null) {
             monster.decreaseHp(hpChange);
             currentMonster.setValue(monster); // Trigger observers
         }
     }
 
-    public List<Item> getLootTable() {
-        return currentMonster.getValue().getLootTable();
+    public List<Item> getCommonDropTable() {
+        return currentMonster.getValue().getCommonDropTable();
     }
 
-    public int getMonsterLevel(){
+    public List<Item> getRareDropTable() {
+        return currentMonster.getValue().getRareDropTable();
+    }
+
+    public List<Item> getSuperRareDropTable() {
+        return currentMonster.getValue().getSuperRareDropTable();
+    }
+
+    public int getMonsterLevel() {
         return currentMonster.getValue().getLevel();
     }
 
-    public int getMonsterHp(){
+    public int getMonsterHp() {
         return currentMonster.getValue().getHpValue();
     }
 
-    public int getMonsterXp(){
+    public int getMonsterXp() {
         return currentMonster.getValue().getXpValue();
     }
 
-    public int getMonsterMaxHp(){
+    public int getMonsterMaxHp() {
         return currentMonster.getValue().getMaxHpValue();
     }
 
-    public void setMonsterHp(int amount){
+    public void setMonsterHp(int amount) {
         BaseMonster monster = currentMonster.getValue();
         currentMonster.getValue().setHpValue(amount);
         currentMonster.setValue(monster);
 
     }
 
-    public int getMonsterDamage(){
+    public int getMonsterDamage() {
         return currentMonster.getValue().getDamageValue();
     }
 
-    public int getDamageDealt(){
+    public int getDamageDealt() {
         return currentMonster.getValue().getDamageDealt();
     }
 
-    public void setDamageDealt(int amount){
+    public void setDamageDealt(int amount) {
         BaseMonster monster = currentMonster.getValue();
         currentMonster.getValue().setDamageDealt(amount);
         currentMonster.setValue(monster);
     }
 
-    public double getAttackSpeed(){
+    public double getAttackSpeed() {
         return currentMonster.getValue().getAttackSpeed();
     }
 

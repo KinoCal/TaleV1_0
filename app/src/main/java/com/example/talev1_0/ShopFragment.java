@@ -172,7 +172,7 @@ public class ShopFragment extends Fragment {
 
             selectedItemName.setText("Name: " + consumableItem.getName());
             selectedItemPrice.setText("Price: " + String.valueOf(consumableItem.getPrice()));
-            selectedItemDamageValue.setText("Damage" + "0");
+            selectedItemDamageValue.setText("Damage: " + "0");
             SelectedItemArmorValue.setText("Armor: " + "0");
             selectedItemHealingValue.setText("Heals: " + consumableItem.getHealingValue());
         }

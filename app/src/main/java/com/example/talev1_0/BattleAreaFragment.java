@@ -121,7 +121,8 @@ public class BattleAreaFragment extends Fragment {
         // Observe changes in the player's data
         playerViewModel.getPlayerLiveData().observe(getViewLifecycleOwner(), player -> {
 
-            ConsumableAdapter consumableAdapter = new ConsumableAdapter(player.getConsumableItemList(), playerViewModel);
+
+            ConsumableAdapter consumableAdapter = new ConsumableAdapter(playerViewModel.getInventoryItems(), playerViewModel);
             consumableRecyclerView.setAdapter(consumableAdapter);
 
         });
@@ -147,6 +148,23 @@ public class BattleAreaFragment extends Fragment {
         startMonsterAttackTimer();
     }
 
+    private void restartPlayerAttackTimerWithDelay(View rootView) {
+        stopPlayerAttackTimer();
+        stopPlayerAttackSpeedProgress();
+
+        // Add a short delay to ensure previous animations are fully stopped
+        playerAttackHandler.postDelayed(() -> startPlayerAttackTimer(rootView), 200);
+    }
+
+    private void restartMonsterAttackTimerWithDelay() {
+        stopMonsterAttackTimer();
+        stopMonsterAttackSpeedProgress();
+
+        // Add a short delay to ensure previous animations are fully stopped
+        monsterAttackHandler.postDelayed(() -> startMonsterAttackTimer(), 200);
+    }
+
+
     private void startPlayerAttackTimer(View rootView) {
         if (playerAttackRunnable == null) {
             playerAttackRunnable = new Runnable() {
@@ -165,10 +183,15 @@ public class BattleAreaFragment extends Fragment {
                         playerAttackHandler.postDelayed(this, delay);
 
                     } else {
-                        // Stop any ongoing timers
+                        // Stop timers and animations
                         stopPlayerAttackTimer();
-                        // Restart the player attack timer
-                        startPlayerAttackTimer(rootView);
+                        stopPlayerAttackSpeedProgress();
+                        stopMonsterAttackTimer();
+                        stopMonsterAttackSpeedProgress();
+
+                        // Restart the player attack timer after a short delay
+                        restartPlayerAttackTimerWithDelay(rootView);
+                        restartMonsterAttackTimerWithDelay();
                     }
                 }
             };
@@ -231,6 +254,8 @@ public class BattleAreaFragment extends Fragment {
                         monsterAttackHandler.postDelayed(this, delay);
                     } else {
                         SnackbarHelper snackbarHelper = new SnackbarHelper(getView());
+                        stopMonsterAttackTimer();
+                        stopMonsterAttackSpeedProgress();
                         snackbarHelper.setGravity(Gravity.BOTTOM).show("You have been slain");
                         if (fragmentChangeListener != null) {
                             fragmentChangeListener.onFragmentChange("InventoryFragment");
@@ -289,7 +314,9 @@ public class BattleAreaFragment extends Fragment {
     private void stopPlayerAttackSpeedProgress() {
         if (playerAttackSpeedRunnable != null) {
             playerAttackSpeedHandler.removeCallbacks(playerAttackSpeedRunnable);
+            playerAttackSpeedRunnable = null; // Ensure it's reset
         }
+        playerAttackSpeedProgressBar.setProgress(0); // Reset progress to 0
     }
 
 
@@ -302,7 +329,9 @@ public class BattleAreaFragment extends Fragment {
     private void stopMonsterAttackSpeedProgress() {
         if (monsterAttackSpeedRunnable != null) {
             monsterAttackSpeedHandler.removeCallbacks(monsterAttackSpeedRunnable);
+            monsterAttackSpeedRunnable = null;
         }
+        monsterAttackSpeedProgressBar.setProgress(0);
     }
 
     @Override

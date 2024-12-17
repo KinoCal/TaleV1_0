@@ -7,8 +7,8 @@ import com.example.talev1_0.gameItems.interfaces.Armor;
 public class ArmorItem extends Item implements Armor {
     private int armorValue;
 
-    public ArmorItem(int itemIndex, String name, String type, String rarity, int price, int armorValue, int quantity, int rarityValue) {
-        super(itemIndex, name, type, rarity, price, quantity, rarityValue);
+    public ArmorItem(int itemIndex, String name, String type, String rarity, int price, int armorValue, int quantity) {
+        super(itemIndex, name, type, rarity, price, quantity);
         this.armorValue = armorValue;
     }
 

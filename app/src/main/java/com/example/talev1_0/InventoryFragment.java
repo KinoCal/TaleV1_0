@@ -22,7 +22,7 @@ import com.example.talev1_0.handlers.InventoryManager;
 import com.example.talev1_0.player.PlayerViewModel;
 
 public class InventoryFragment extends Fragment {
-    private TextView strengthStat, defenceStat, damageStat;
+    private TextView strengthStat, defenceStat, damageStat, armorStat, damageRange;
     private Button useButton, equipButton, unequipButton, equippedWeaponButton, equippedArmorButton;
     private TextView selectedItemName, selectedItemPrice, selectedItemDamageValue, SelectedItemArmorValue, selectedItemHealingValue;
     private PlayerViewModel playerViewModel;
@@ -52,9 +52,6 @@ public class InventoryFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 3); // 3 columns
         inventoryRecyclerView.setLayoutManager(gridLayoutManager);
 
-        damageStat = view.findViewById(R.id.player_damage_textview);
-        strengthStat = view.findViewById(R.id.player_strength_textview);
-        defenceStat = view.findViewById(R.id.player_defence_textview);
         equippedWeaponButton = view.findViewById(R.id.equipped_weapon);
         equippedArmorButton = view.findViewById(R.id.equipped_armor);
 
@@ -83,11 +80,8 @@ public class InventoryFragment extends Fragment {
             // Update the UI (e.g., display the current HP)
             InventoryAdapter inventoryAdapter = new InventoryAdapter(player.inventoryItems, this::setUiForSelectedInventoryItem);
             inventoryRecyclerView.setAdapter(inventoryAdapter);
-
             inventoryAdapter.notifyDataSetChanged();
-            damageStat.setText("Damage: " + player.getDamage());
-            strengthStat.setText("Strength: " + player.getStrengthStat());
-            defenceStat.setText("Defence: " + player.getDefenceStat());
+
             equippedWeaponButton.setText(playerViewModel.getEquippedItemAtIndex(0).getName());
             equippedArmorButton.setText(playerViewModel.getEquippedItemAtIndex(1).getName());
         });
@@ -95,6 +89,8 @@ public class InventoryFragment extends Fragment {
 
         // EQUIPMENT BUTTONS
         equippedWeaponButton.setOnClickListener(v -> {
+            System.out.println(playerViewModel.getPlayer().getUsername());
+            playerViewModel.savePlayer();
             equipmentIndex = 0;
             SetupUiForSelectedEquipmentItem(equipmentIndex);
         });

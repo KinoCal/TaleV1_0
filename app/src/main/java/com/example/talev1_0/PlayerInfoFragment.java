@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,7 +17,7 @@ import com.example.talev1_0.player.PlayerViewModel;
 public class PlayerInfoFragment extends Fragment {
     private PlayerViewModel playerViewModel;
     private TextView textViewHp, textViewGold, textViewLevel, textViewExp;
-    private ProgressBar playerHpProgressBar;
+    private ProgressBar playerHpProgressBar, playerExpProgressBar;
 
     @Nullable
     @Override
@@ -27,6 +28,7 @@ public class PlayerInfoFragment extends Fragment {
         textViewLevel = view.findViewById(R.id.player_level_textview);
         textViewExp = view.findViewById(R.id.player_current_exp_textview);
         playerHpProgressBar = view.findViewById(R.id.player_hp_progressbar);
+        playerExpProgressBar = view.findViewById(R.id.player_exp_progressbar);
 
         return view;
     }
@@ -48,6 +50,9 @@ public class PlayerInfoFragment extends Fragment {
             textViewGold.setText("Gold: " + player.getGold());
             playerHpProgressBar.setMax(player.getMaxHp());
             playerHpProgressBar.setProgress(player.getCurrentHp());
+
+            playerExpProgressBar.setMax(player.getMaxExp());
+            playerExpProgressBar.setProgress(player.getCurrentExp());
         });
     }
 
