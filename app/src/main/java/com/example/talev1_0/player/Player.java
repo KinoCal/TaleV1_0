@@ -61,6 +61,7 @@ public class Player {
             inventoryItems.add(empty);
         }
 
+
         currentWeapon = (WeaponItem) equippedItems[0];
         currentArmor = (ArmorItem) equippedItems[1];
 

@@ -5,16 +5,16 @@ public class DragonMonster extends BaseMonster implements MonsterInterface {
         super("Dragon", "Monster", 1000, 97, 300, 100);
 
         //Common
-        addCommonDrop("weapon", "Dagger");
-        addCommonDrop("weapon", "Short Sword");
-        addCommonDrop("armor", "Cloth Body");
-        addCommonDrop("consumable", "Hp Potion");
+        addCommonDrop("weapon", "Dagger", 1);
+        addCommonDrop("weapon", "Short Sword", 1);
+        addCommonDrop("armor", "Cloth Body", 1);
+        addCommonDrop("consumable", "Hp Potion", 1);
         //Rare
-        addRareDrop("weapon", "Sword");
-        addRareDrop("weapon", "Long Sword");
-        addRareDrop("armor", "Goblin Armor");
+        addRareDrop("weapon", "Sword", 1);
+        addRareDrop("weapon", "Long Sword", 1);
+        addRareDrop("armor", "Goblin Armor", 1);
         //Super Rare
-        addSuperRareDrop("weapon", "Mace");
-        addSuperRareDrop("weapon", "God Sword");
+        addSuperRareDrop("weapon", "Mace", 1);
+        addSuperRareDrop("weapon", "God Sword", 1);
     }
 }

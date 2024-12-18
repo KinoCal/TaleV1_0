@@ -19,11 +19,11 @@ public class Factories {
         factoryMap.put("empty", new EmptyFactory());
     }
 
-    public Item createItem(String itemType, String itemName) {
+    public Item createItem(String itemType, String itemName, int quantity) {
         ItemFactory factory = factoryMap.get(itemType.toLowerCase());
         if (factory == null) {
             throw new IllegalArgumentException("Unknown item type: " + itemType);
         }
-        return factory.createItem(itemName);
+        return factory.createItem(itemName, quantity);
     }
 }

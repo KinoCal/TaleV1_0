@@ -18,4 +18,7 @@ public interface InventoryDao {
 
     @Query("SELECT * FROM inventory_table WHERE id = :id LIMIT 1")
     InventoryEntity getInventoryById(int id);
+
+    @Query("SELECT * FROM inventory_table WHERE username = :username ")
+    List<InventoryEntity> getEntireInventory(String username);
 }

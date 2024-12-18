@@ -158,18 +158,18 @@ public abstract class BaseMonster implements MonsterInterface {
     }
 
 
-    public void addCommonDrop(String type, String name) {
-        commonDropTable.add(factories.createItem(type, name));
+    public void addCommonDrop(String type, String name, int quantity) {
+        commonDropTable.add(factories.createItem(type, name, quantity));
 
     }
 
-    public void addRareDrop(String type, String name) {
-        rareDropTable.add(factories.createItem(type, name));
+    public void addRareDrop(String type, String name, int quantity) {
+        rareDropTable.add(factories.createItem(type, name, quantity));
 
     }
 
-    public void addSuperRareDrop(String type, String name) {
-        superRareDropTable.add(factories.createItem(type, name));
+    public void addSuperRareDrop(String type, String name, int quantity) {
+        superRareDropTable.add(factories.createItem(type, name, quantity));
 
     }
 

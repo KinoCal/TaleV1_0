@@ -30,6 +30,7 @@ public class PlayerViewModel extends AndroidViewModel {
     private final Application application;
     private Factories factories;
     private MutableLiveData<String> messageLiveData = new MutableLiveData<>();
+    PlayerService playerService;
 
     public PlayerViewModel(Application application) {
         super(application);
@@ -37,15 +38,18 @@ public class PlayerViewModel extends AndroidViewModel {
         playerLiveData.setValue(player);
         factories = new Factories();
         this.application = application;
+        playerService = RetrofitClient.getInstance().create(PlayerService.class);
 
         //initializePlayer(1);
     }
-
+/*
     @Override
     protected void onCleared() {
         super.onCleared();
         savePlayerToDatabase(player, 1); // Save to Room when ViewModel is cleared
     }
+
+ */
 
     public void registerPlayer(String username, String password) {
         new Thread(() -> {
@@ -53,7 +57,6 @@ public class PlayerViewModel extends AndroidViewModel {
             playerEntity.setUsername(username);
             playerEntity.setPassword(password);
 
-            PlayerService playerService = RetrofitClient.getInstance().create(PlayerService.class);
             playerService.registerPlayer(playerEntity).enqueue(new Callback<>() {
 
                 @Override
@@ -61,6 +64,7 @@ public class PlayerViewModel extends AndroidViewModel {
                     if (response.isSuccessful()) {
                         messageLiveData.postValue("Registration successful you may login now!");
                         System.out.println("Registration successful");
+                        registerInventory();
                     } else {
                         messageLiveData.postValue("Registration failed: Username already exists");
                     }
@@ -82,7 +86,6 @@ public class PlayerViewModel extends AndroidViewModel {
             playerEntity.setUsername(username);
             playerEntity.setPassword(password);
 
-            PlayerService playerService = RetrofitClient.getInstance().create(PlayerService.class);
             playerService.loginPlayer(playerEntity).enqueue(new Callback<>() {
                 @Override
                 public void onResponse(Call<PlayerEntity> call, Response<PlayerEntity> response) {
@@ -92,6 +95,7 @@ public class PlayerViewModel extends AndroidViewModel {
                         // Convert response body to Player object
                         player = mapEntityToPlayer(response.body());
 
+                        loadInventory();
                         // Save to local Room database (overwriting existing data)
                         savePlayerToDatabase(player, 1);
 
@@ -112,17 +116,69 @@ public class PlayerViewModel extends AndroidViewModel {
 
     }
 
+    public void registerInventory() {
+        InventoryEntity inventoryEntity = new InventoryEntity();
+        inventoryEntity.setUsername(player.getUsername());
+
+        playerService.registerInventory(inventoryEntity).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    System.out.println("successfully registered inventory");
+                } else {
+                    System.out.println("inventory failed to register");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                System.out.println(t.getMessage() + "failed inventory**");
+            }
+        });
+    }
+
+    public void loadInventory() {
+
+        playerService.loadInventory(player.getUsername()).enqueue(new Callback<List<InventoryEntity>>() {
+            @Override
+            public void onResponse(Call<List<InventoryEntity>> call, Response<List<InventoryEntity>> response) {
+                if (response.isSuccessful()) {
+                    for (int i = 0; i < 30; i++) {
+                        player.inventoryItems.set(i, factories.createItem(response.body().get(i).getType(), response.body().get(i).getName(), response.body().get(i).getQuantity()));
+
+                    }
+                    System.out.println("inside load inventory");
+                    saveInventoryToDatabase(player);
+                    playerLiveData.postValue(player);
+                } else {
+                    Log.d("Player_inventory", "error loading inventory in method");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<InventoryEntity>> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     // Initialize player from the database or create a new one
     public void initializePlayer(int playerId) {
         new Thread(() -> {
             PlayerEntity playerEntity = DatabaseClient.getInstance(application).getAppDatabase().playerDao().getPlayerById(playerId);
+            List<InventoryEntity> inventoryEntities = DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getEntireInventory(player.getUsername());
 
             if (playerEntity != null) {
                 // Existing player found, map it to the Player object
+                System.out.println("existing player found initializing player");
                 player = mapEntityToPlayer(playerEntity);
+                loadInventory();
+
+                //loadInventory();
             } else {
                 // No player found, create a new one
+                System.out.println("no player found initializing player");
                 player = new Player(); // Initialize new player data
                 //initializeEquipmentInDatabase();
                 //initializeInventoryInDatabase();
@@ -135,41 +191,16 @@ public class PlayerViewModel extends AndroidViewModel {
         }).start();
     }
 
-    // Method to initialize player's inventory in the database
-    private void initializeInventoryInDatabase() {
-        new Thread(() -> {
-            // Create a list of default inventory items
-            List<InventoryEntity> inventoryItems = new ArrayList<>();
 
-            // Add default items to the list
+    private void mapEntityToInventory(List<InventoryEntity> inventoryEntities, Player player) {
 
-            for (int i = 0; i < player.getInventorySize(); i++) {
-                inventoryItems.add(new InventoryEntity("empty", "empty", 1));
+        List<Item> tempInventory = new ArrayList<>();
+        for (int i = 0; i < inventoryEntities.size(); i++) {
 
-            }
+            player.inventoryItems.set(i, factories.createItem(inventoryEntities.get(i).getType(), inventoryEntities.get(i).getName(), inventoryEntities.get(i).getQuantity()));
 
-            // Insert the items into the inventory table
-            DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().insertAll(inventoryItems);
+        }
 
-            // Optional: Post a message back to the UI thread
-        }).start();
-    }
-
-    // Method to initialize player's equipment in the database
-    private void initializeEquipmentInDatabase() {
-        new Thread(() -> {
-            // Create a list of default inventory items
-            List<EquipmentEntity> equipmentItems = new ArrayList<>();
-
-            // Add default items to the list
-            equipmentItems.add(new EquipmentEntity("empty", "weapon"));
-            equipmentItems.add(new EquipmentEntity("empty", "armor"));
-
-            // Insert the items into the inventory table
-            DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().insertAll(equipmentItems);
-
-            // Optional: Post a message back to the UI thread
-        }).start();
     }
 
     // Helper to map InventoryEntity to players inventory, playerEntity to player and equipmentEntity to player
@@ -193,29 +224,49 @@ public class PlayerViewModel extends AndroidViewModel {
         player.setMaxExp(entity.getMaxExp());
         player.setGold(entity.getGold());
         player.setStatPoints(entity.getStatPoints());
-/*
-            // Retrieve inventory items
-            List<InventoryEntity> inventoryEntities = new ArrayList<>();
-            for (int i = 1; i < player.getInventorySize() + 1; i++) {
-                inventoryEntities.add(DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getInventoryById(i));
-            }
-
-            // Correctly pass the correct inventory name for each item
-            for (int i = 0; i < player.getInventorySize(); i++) {
-                player.setInventoryItem(factories.createItem(inventoryEntities.get(i).getType(), inventoryEntities.get(i).getName()), i);
-                player.getInventoryItem(i).setQuantity(inventoryEntities.get(i).getQuantity());
-            }
-
-            // Retrieve equipment items
-            EquipmentEntity equipmentEntity1 = DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().getEquipmentById(1);
-            EquipmentEntity equipmentEntity2 = DatabaseClient.getInstance(application).getAppDatabase().equipmentDao().getEquipmentById(2);
-
-            // Pass database entities to the players equipment
-            player.setEquippedItems(factories.createItem(equipmentEntity1.getType(), equipmentEntity1.getName()), 0);
-            player.setEquippedItems(factories.createItem(equipmentEntity2.getType(), equipmentEntity2.getName()), 1);
-*/
 
         return player;
+    }
+
+    public void saveInventoryToDatabase(Player player) {
+        System.out.println("inside save inventory to database");
+        new Thread(() -> {
+            List<InventoryEntity> inventoryEntities = new ArrayList<>();
+
+            // Save the player's inventory data
+            for (int i = 0; i < 30; i++) {
+                InventoryEntity tempEntity = new InventoryEntity(); // Create a new object for each item
+                tempEntity.setUsername(player.getUsername());
+                tempEntity.setName(player.getInventoryItem(i).getName());
+                tempEntity.setType(player.getInventoryItem(i).getType());
+                tempEntity.setQuantity(player.getInventoryItem(i).getQuantity());
+                inventoryEntities.add(tempEntity);
+            }
+
+            System.out.println(inventoryEntities.get(0).getUsername());
+            System.out.println(inventoryEntities.get(0).getName());
+
+            // Update the database with each inventory item
+            DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().insertAll(inventoryEntities);
+
+            System.out.println(inventoryEntities.size() + " inventory entity size");
+            // Push updated data to Spring Boot backend
+            playerService.updateInventory(inventoryEntities).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        Log.d("SaveInventory", "Inventory data saved to Spring");
+                    } else {
+                        Log.e("SaveInventory", "Failed to save inventory to Spring");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e("SaveInventory", "Error: saving inventory - " + t.getMessage());
+                }
+            });
+        }).start();
     }
 
 
@@ -244,7 +295,7 @@ public class PlayerViewModel extends AndroidViewModel {
             DatabaseClient.getInstance(application).getAppDatabase().playerDao().insertPlayer(playerEntity);
 
             // Push updated data to Spring Boot backend
-            PlayerService playerService = RetrofitClient.getInstance().create(PlayerService.class);
+            playerService = RetrofitClient.getInstance().create(PlayerService.class);
             playerService.updatePlayer(playerEntity).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
@@ -546,6 +597,10 @@ public class PlayerViewModel extends AndroidViewModel {
         playerLiveData.setValue(player);
     }
 
+    public LiveData<String> getMessageLiveData() {
+        return messageLiveData;
+    }
+/*
     public void increaseInventorySize(int additionalSlots) {
         new Thread(() -> {
             if (player != null) {
@@ -571,6 +626,8 @@ public class PlayerViewModel extends AndroidViewModel {
     public LiveData<String> getMessageLiveData() {
         return messageLiveData;
     }
+
+ */
 
 }
 

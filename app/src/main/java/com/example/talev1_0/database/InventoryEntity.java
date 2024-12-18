@@ -10,18 +10,23 @@ public class InventoryEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    private String username;
     private String name;
     private String type;
     private int quantity;
 
 
     // Constructor
-    public InventoryEntity(String name, String type, int quantity){
+    public InventoryEntity(String username, String name, String type, int quantity) {
 
-
+        this.username = username;
         this.name = name;
         this.type = type;
         this.quantity = quantity;
+    }
+
+    public InventoryEntity() {
+
     }
 
     public int getId() {
@@ -32,7 +37,13 @@ public class InventoryEntity {
         this.id = id;
     }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getName() {
         return name;

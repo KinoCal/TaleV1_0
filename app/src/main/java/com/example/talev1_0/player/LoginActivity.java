@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        checkServerConnection();
+        //checkServerConnection();
         // Initialize UI components
         usernameEditText = findViewById(R.id.usernameEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (message.equals("Login successful")) {
                 // Navigate to main game activity
+                
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish(); // Prevent going back to login screen
@@ -70,10 +71,10 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(v -> {
             String username = usernameEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
+            playerViewModel.setUserName(username);
+            playerViewModel.setPassword(password);
 
             if (validateInputs(username, password)) {
-                playerViewModel.setUserName(username);
-                playerViewModel.setPassword(password);
                 playerViewModel.loginPlayer(username, password);
             }
         });
@@ -92,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+    /*
     private void checkServerConnection() {
         Retrofit retrofit = RetrofitClient.getInstance();
         PlayerService playerService = retrofit.create(PlayerService.class);
@@ -112,4 +114,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+     */
 }
