@@ -90,12 +90,13 @@ public class InventoryFragment extends Fragment {
         // EQUIPMENT BUTTONS
         equippedWeaponButton.setOnClickListener(v -> {
             System.out.println(playerViewModel.getPlayer().getUsername());
-            playerViewModel.savePlayer();
+            playerViewModel.updateSqlDatabase();
             equipmentIndex = 0;
             SetupUiForSelectedEquipmentItem(equipmentIndex);
         });
 
         equippedArmorButton.setOnClickListener(v -> {
+            playerViewModel.saveInventoryToDatabase(playerViewModel.getPlayer());
             equipmentIndex = 1;
             SetupUiForSelectedEquipmentItem(equipmentIndex);
         });

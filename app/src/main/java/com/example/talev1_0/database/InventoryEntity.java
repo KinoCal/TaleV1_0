@@ -8,7 +8,7 @@ public class InventoryEntity {
 
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     private String username;
     private String name;
@@ -29,7 +29,7 @@ public class InventoryEntity {
 
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

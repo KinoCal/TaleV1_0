@@ -108,6 +108,10 @@ public class Player {
         inventoryItems.set(index, item);
     }
 
+    public void setInventory(List<Item> newInventory) {
+        inventoryItems = newInventory;
+    }
+
     public boolean isInventoryFull() {
         Boolean check = false;
         for (Item item : inventoryItems) {

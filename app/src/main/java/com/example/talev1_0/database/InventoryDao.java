@@ -20,5 +20,11 @@ public interface InventoryDao {
     InventoryEntity getInventoryById(int id);
 
     @Query("SELECT * FROM inventory_table WHERE username = :username ")
-    List<InventoryEntity> getEntireInventory(String username);
+    List<InventoryEntity> getEntireInventoryByUsername(String username);
+
+    @Query("SELECT * FROM inventory_table")
+    List<InventoryEntity> getEntireInventory();
+
+    @Query("Delete FROM inventory_table")
+    void deleteEntireInventory();
 }

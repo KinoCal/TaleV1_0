@@ -2,7 +2,6 @@ package com.example.talev1_0.player;
 
 import android.app.Application;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -10,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.talev1_0.Factories.ItemFactories.Factories;
 import com.example.talev1_0.database.DatabaseClient;
-import com.example.talev1_0.database.EquipmentEntity;
 import com.example.talev1_0.database.InventoryEntity;
 import com.example.talev1_0.database.PlayerEntity;
 import com.example.talev1_0.gameItems.abstractClasses.Item;
@@ -94,8 +92,8 @@ public class PlayerViewModel extends AndroidViewModel {
 
                         // Convert response body to Player object
                         player = mapEntityToPlayer(response.body());
+                        //loadInventory();
 
-                        loadInventory();
                         // Save to local Room database (overwriting existing data)
                         savePlayerToDatabase(player, 1);
 
@@ -162,26 +160,51 @@ public class PlayerViewModel extends AndroidViewModel {
         });
     }
 
+    public void updateSqlDatabase() {
+
+
+        new Thread(() -> {
+            List<InventoryEntity> inventoryEntities = DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getEntireInventory();
+            playerService.updateInventory(inventoryEntities).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        Log.d("SaveInventory", "Inventory data saved to Spring");
+                        System.out.println(inventoryEntities.get(0).getName());
+                    } else {
+                        Log.e("SaveInventory", "Failed to save inventory to Spring");
+                        System.out.println(response.body());
+                        System.out.println(inventoryEntities.get(0).getUsername());
+                        System.out.println(inventoryEntities.get(0).getId());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e("SaveInventory", "Error: saving inventory - " + t.getMessage());
+
+                }
+            });
+        }).start();
+    }
+
 
     // Initialize player from the database or create a new one
     public void initializePlayer(int playerId) {
         new Thread(() -> {
             PlayerEntity playerEntity = DatabaseClient.getInstance(application).getAppDatabase().playerDao().getPlayerById(playerId);
-            List<InventoryEntity> inventoryEntities = DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().getEntireInventory(player.getUsername());
 
             if (playerEntity != null) {
                 // Existing player found, map it to the Player object
                 System.out.println("existing player found initializing player");
                 player = mapEntityToPlayer(playerEntity);
                 loadInventory();
+                System.out.println(player.inventoryItems.get(5));
 
-                //loadInventory();
             } else {
                 // No player found, create a new one
                 System.out.println("no player found initializing player");
                 player = new Player(); // Initialize new player data
-                //initializeEquipmentInDatabase();
-                //initializeInventoryInDatabase();
                 savePlayerToDatabase(player, 1); // Save to database with the given ID
 
 
@@ -191,17 +214,6 @@ public class PlayerViewModel extends AndroidViewModel {
         }).start();
     }
 
-
-    private void mapEntityToInventory(List<InventoryEntity> inventoryEntities, Player player) {
-
-        List<Item> tempInventory = new ArrayList<>();
-        for (int i = 0; i < inventoryEntities.size(); i++) {
-
-            player.inventoryItems.set(i, factories.createItem(inventoryEntities.get(i).getType(), inventoryEntities.get(i).getName(), inventoryEntities.get(i).getQuantity()));
-
-        }
-
-    }
 
     // Helper to map InventoryEntity to players inventory, playerEntity to player and equipmentEntity to player
     private Player mapEntityToPlayer(PlayerEntity entity) {
@@ -231,6 +243,7 @@ public class PlayerViewModel extends AndroidViewModel {
     public void saveInventoryToDatabase(Player player) {
         System.out.println("inside save inventory to database");
         new Thread(() -> {
+            DatabaseClient.getInstance(application).getAppDatabase().inventoryDao().deleteEntireInventory();
             List<InventoryEntity> inventoryEntities = new ArrayList<>();
 
             // Save the player's inventory data
@@ -251,22 +264,10 @@ public class PlayerViewModel extends AndroidViewModel {
 
             System.out.println(inventoryEntities.size() + " inventory entity size");
             // Push updated data to Spring Boot backend
-            playerService.updateInventory(inventoryEntities).enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        Log.d("SaveInventory", "Inventory data saved to Spring");
-                    } else {
-                        Log.e("SaveInventory", "Failed to save inventory to Spring");
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    Log.e("SaveInventory", "Error: saving inventory - " + t.getMessage());
-                }
-            });
         }).start();
+
+
     }
 
 
