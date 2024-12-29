@@ -135,31 +135,6 @@ public class PlayerViewModel extends AndroidViewModel {
         });
     }
 
-    public void loadInventory() {
-
-        playerService.loadInventory(player.getUsername()).enqueue(new Callback<List<InventoryEntity>>() {
-            @Override
-            public void onResponse(Call<List<InventoryEntity>> call, Response<List<InventoryEntity>> response) {
-                if (response.isSuccessful()) {
-                    for (int i = 0; i < 30; i++) {
-                        player.inventoryItems.set(i, factories.createItem(response.body().get(i).getType(), response.body().get(i).getName(), response.body().get(i).getQuantity()));
-
-                    }
-                    System.out.println("inside load inventory");
-                    saveInventoryToDatabase(player);
-                    playerLiveData.postValue(player);
-                } else {
-                    Log.d("Player_inventory", "error loading inventory in method");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<InventoryEntity>> call, Throwable t) {
-
-            }
-        });
-    }
-
     public void updateSqlDatabase() {
 
 
@@ -186,6 +161,31 @@ public class PlayerViewModel extends AndroidViewModel {
                 }
             });
         }).start();
+    }
+
+    public void loadInventory() {
+
+        playerService.loadInventory(player.getUsername()).enqueue(new Callback<List<InventoryEntity>>() {
+            @Override
+            public void onResponse(Call<List<InventoryEntity>> call, Response<List<InventoryEntity>> response) {
+                if (response.isSuccessful()) {
+                    for (int i = 0; i < 30; i++) {
+                        player.inventoryItems.set(i, factories.createItem(response.body().get(i).getType(), response.body().get(i).getName(), response.body().get(i).getQuantity()));
+
+                    }
+                    System.out.println("inside load inventory");
+                    saveInventoryToDatabase(player);
+                    playerLiveData.postValue(player);
+                } else {
+                    Log.d("Player_inventory", "error loading inventory in method");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<InventoryEntity>> call, Throwable t) {
+
+            }
+        });
     }
 
 

@@ -2,7 +2,6 @@ package com.example.talev1_0.Factories.ItemFactories;
 
 import com.example.talev1_0.Factories.ItemFactory;
 import com.example.talev1_0.gameItems.conreteClasses.equipment.WeaponItem;
-import com.example.talev1_0.helpers.RarityValues;
 
 
 public class WeaponFactory implements ItemFactory {
